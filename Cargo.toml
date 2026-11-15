@@ -1,0 +1,28 @@
+[package]
+name = "hxn-gpu-webgl2"
+version = "0.1.0"
+edition = "2024"
+description = "WebGL2 for Haxe in the browser, through hxcpp and Emscripten or Ash: buffers, textures, samplers, programs, vertex arrays and framebuffers"
+repository = "https://github.com/hx-n/hxn-gpu-webgl2"
+license = "Apache-2.0"
+keywords = ["webgl2", "webgl", "gpu", "haxe", "graphics", "glsl", "wasm", "emscripten", "browser"]
+
+[lib]
+name = "hxn_gpu_webgl2"
+
+[package.metadata.hxn]
+library = "gpu_webgl2"
+haxelib = "hxn-gpu-webgl2"
+contributors = ["darmie", "rayzor"]
+releasenote = "First release."
+haxe = "examples/check"
+haxe-flags = ["-lib", "hxnsl"]
+# Registers hxnsl's GLSL target for gpu.webgl2.Shader, from sources/.
+init = ["gpu.webgl2.Shaders.register()"]
+# Emscripten's OpenGL ES 3.0 is WebGL2.
+link-args = { wasm32-unknown-emscripten = ["-sMIN_WEBGL_VERSION=2", "-sMAX_WEBGL_VERSION=2"] }
+
+[dependencies]
+# hxn after 0.3.3: threaded Ash builds, page files and Ash web pages.
+hxn = { git = "https://github.com/hx-n/hxn.git", rev = "cbf7e13" }
+hxn-future = { git = "https://github.com/hx-n/hxn.git", rev = "cbf7e13" }

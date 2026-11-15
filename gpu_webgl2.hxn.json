@@ -1,0 +1,460 @@
+{
+  "hxn": 1,
+  "library": "gpu_webgl2",
+  "package": "gpu.webgl2",
+  "enums": [
+    {
+      "name": "TextureFormat",
+      "docs": "A texture's internal format, OpenGL ES's values.",
+      "variants": [{ "name": "R8", "value": 33321 }, { "name": "Rg8", "value": 33323 }, { "name": "Rgba8", "value": 32856 }, { "name": "Srgb8Alpha8", "value": 35907 }, { "name": "R32f", "value": 33326 }, { "name": "Rgba16f", "value": 34842 }, { "name": "Rgba32f", "value": 34836 }, { "name": "Depth24Stencil8", "value": 35056 }, { "name": "Depth32f", "value": 36012 }]
+    },
+    {
+      "name": "BufferTarget",
+      "docs": "The binding target a buffer is created for, OpenGL ES's values.",
+      "variants": [{ "name": "Array", "value": 34962 }, { "name": "ElementArray", "value": 34963 }, { "name": "Uniform", "value": 35345 }, { "name": "CopyRead", "value": 36662 }, { "name": "CopyWrite", "value": 36663 }, { "name": "PixelPack", "value": 35051 }, { "name": "PixelUnpack", "value": 35052 }]
+    },
+    {
+      "name": "Usage",
+      "docs": "A buffer's usage hint, OpenGL ES's values.",
+      "variants": [{ "name": "StaticDraw", "value": 35044 }, { "name": "DynamicDraw", "value": 35048 }, { "name": "StreamDraw", "value": 35040 }, { "name": "StaticRead", "value": 35045 }, { "name": "DynamicRead", "value": 35049 }, { "name": "StreamRead", "value": 35041 }]
+    },
+    {
+      "name": "Filter",
+      "docs": "A sampler's filter, OpenGL ES's values.",
+      "variants": [{ "name": "Nearest", "value": 9728 }, { "name": "Linear", "value": 9729 }]
+    },
+    {
+      "name": "Wrap",
+      "docs": "A sampler's wrap mode, OpenGL ES's values.",
+      "variants": [{ "name": "Repeat", "value": 10497 }, { "name": "ClampToEdge", "value": 33071 }, { "name": "MirroredRepeat", "value": 33648 }]
+    },
+    {
+      "name": "Primitive",
+      "docs": "A draw's primitive, OpenGL ES's values.",
+      "variants": [{ "name": "Points", "value": 0 }, { "name": "Lines", "value": 1 }, { "name": "LineLoop", "value": 2 }, { "name": "LineStrip", "value": 3 }, { "name": "Triangles", "value": 4 }, { "name": "TriangleStrip", "value": 5 }, { "name": "TriangleFan", "value": 6 }]
+    },
+    {
+      "name": "ComponentType",
+      "docs": "A vertex attribute's or index's component type, OpenGL ES's values.",
+      "variants": [{ "name": "Byte", "value": 5120 }, { "name": "UnsignedByte", "value": 5121 }, { "name": "Short", "value": 5122 }, { "name": "UnsignedShort", "value": 5123 }, { "name": "Int", "value": 5124 }, { "name": "UnsignedInt", "value": 5125 }, { "name": "Float", "value": 5126 }, { "name": "HalfFloat", "value": 5131 }]
+    },
+    {
+      "name": "ClearBits",
+      "docs": "`Context.clear` bits, OpenGL ES's values, or-ed together.",
+      "variants": [{ "name": "Depth", "value": 256 }, { "name": "Stencil", "value": 1024 }, { "name": "Color", "value": 16384 }]
+    }
+  ],
+  "interfaces": [
+    {
+      "name": "Context",
+      "docs": "A WebGL2 context on the web page's canvas.",
+      "methods": [
+        {
+          "name": "create",
+          "docs": "A WebGL2 context on the web page's canvas. Throws when the browser has no WebGL2 or the\npage no canvas.",
+          "kind": "static",
+          "params": [],
+          "returns": "Context",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "set_size",
+          "docs": "Sets the size of the canvas's drawing buffer, in pixels.",
+          "kind": "method",
+          "params": [{ "name": "width", "type": "i32" }, { "name": "height", "type": "i32" }],
+          "returns": "void",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "width",
+          "docs": "The width of the canvas's drawing buffer.",
+          "kind": "method",
+          "params": [],
+          "returns": "i32",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "height",
+          "docs": "The height of the canvas's drawing buffer.",
+          "kind": "method",
+          "params": [],
+          "returns": "i32",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "renderer",
+          "docs": "`GL_RENDERER`.",
+          "kind": "method",
+          "params": [],
+          "returns": "str",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "version",
+          "docs": "`GL_VERSION`.",
+          "kind": "method",
+          "params": [],
+          "returns": "str",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "extensions",
+          "docs": "The extensions WebGL2 supports here, separated by spaces.",
+          "kind": "method",
+          "params": [],
+          "returns": "str",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "error",
+          "docs": "`getError`: 0, or the first error since the last call.",
+          "kind": "method",
+          "params": [],
+          "returns": "i32",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "create_buffer",
+          "docs": "A buffer of `size` bytes, zeroed, for `target`.",
+          "kind": "method",
+          "params": [{ "name": "target", "type": "BufferTarget" }, { "name": "size", "type": "i64" }, { "name": "usage", "type": "Usage" }],
+          "returns": "Buffer",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "create_buffer_with",
+          "docs": "A buffer holding `bytes`, for `target`.",
+          "kind": "method",
+          "params": [{ "name": "target", "type": "BufferTarget" }, { "name": "bytes", "type": "bytes" }, { "name": "usage", "type": "Usage" }],
+          "returns": "Buffer",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "create_texture",
+          "docs": "A 2D texture of one level, with immutable storage.",
+          "kind": "method",
+          "params": [{ "name": "width", "type": "i32" }, { "name": "height", "type": "i32" }, { "name": "format", "type": "TextureFormat" }],
+          "returns": "Texture",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "create_sampler",
+          "docs": "A sampler with these filters and wrap modes.",
+          "kind": "method",
+          "params": [{ "name": "min", "type": "Filter" }, { "name": "mag", "type": "Filter" }, { "name": "wrap_s", "type": "Wrap" }, { "name": "wrap_t", "type": "Wrap" }],
+          "returns": "Sampler",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "create_program",
+          "docs": "A program linked from GLSL ES 3.00 vertex and fragment sources. Compile and link errors\nare thrown with WebGL's log.",
+          "kind": "method",
+          "params": [{ "name": "vertex", "type": "str" }, { "name": "fragment", "type": "str" }],
+          "returns": "Program",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "create_vertex_array",
+          "docs": "An empty vertex array.",
+          "kind": "method",
+          "params": [],
+          "returns": "VertexArray",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "create_framebuffer",
+          "docs": "A framebuffer rendering into `color`. Throws unless it is complete.",
+          "kind": "method",
+          "params": [{ "name": "color", "type": "Texture" }],
+          "returns": "Framebuffer",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "bind_framebuffer",
+          "docs": "Renders into `framebuffer` from now on.",
+          "kind": "method",
+          "params": [{ "name": "framebuffer", "type": "Framebuffer" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "bind_default_framebuffer",
+          "docs": "Renders into the web page's canvas from now on.",
+          "kind": "method",
+          "params": [],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "viewport",
+          "kind": "method",
+          "params": [{ "name": "x", "type": "i32" }, { "name": "y", "type": "i32" }, { "name": "width", "type": "i32" }, { "name": "height", "type": "i32" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "scissor",
+          "kind": "method",
+          "params": [{ "name": "x", "type": "i32" }, { "name": "y", "type": "i32" }, { "name": "width", "type": "i32" }, { "name": "height", "type": "i32" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "clear",
+          "docs": "Clears the bound framebuffer's color, depth or stencil: `bits` are `ClearBits` or-ed\ntogether.",
+          "kind": "method",
+          "params": [{ "name": "bits", "type": "i32" }, { "name": "r", "type": "f64" }, { "name": "g", "type": "f64" }, { "name": "b", "type": "f64" }, { "name": "a", "type": "f64" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "use_program",
+          "kind": "method",
+          "params": [{ "name": "program", "type": "Program" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "bind_vertex_array",
+          "kind": "method",
+          "params": [{ "name": "vertex_array", "type": "VertexArray" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "bind_uniform_buffer",
+          "docs": "Binds `buffer` to uniform buffer binding point `index`.",
+          "kind": "method",
+          "params": [{ "name": "index", "type": "i32" }, { "name": "buffer", "type": "Buffer" }],
+          "returns": "void",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "bind_texture",
+          "docs": "Binds `texture` and `sampler` to texture unit `unit`.",
+          "kind": "method",
+          "params": [{ "name": "unit", "type": "i32" }, { "name": "texture", "type": "Texture" }, { "name": "sampler", "type": "Sampler" }],
+          "returns": "void",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "draw_arrays",
+          "docs": "`drawArraysInstanced`.",
+          "kind": "method",
+          "params": [{ "name": "primitive", "type": "Primitive" }, { "name": "first", "type": "i32" }, { "name": "count", "type": "i32" }, { "name": "instances", "type": "i32" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "draw_elements",
+          "docs": "`drawElementsInstanced`, with indices from the bound vertex array's element buffer,\nstarting `offset` bytes in.",
+          "kind": "method",
+          "params": [{ "name": "primitive", "type": "Primitive" }, { "name": "count", "type": "i32" }, { "name": "kind", "type": "ComponentType" }, { "name": "offset", "type": "i32" }, { "name": "instances", "type": "i32" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "read_pixels",
+          "docs": "The bound framebuffer's pixels in a rectangle, as 8-bit RGBA, bottom row first. On the\ncanvas, read in the same frame as the drawing: the browser clears the canvas after\nshowing it.",
+          "kind": "method",
+          "params": [{ "name": "x", "type": "i32" }, { "name": "y", "type": "i32" }, { "name": "width", "type": "i32" }, { "name": "height", "type": "i32" }],
+          "returns": "bytes",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "flush",
+          "docs": "`flush`.",
+          "kind": "method",
+          "params": [],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "finish",
+          "docs": "`finish`.",
+          "kind": "method",
+          "params": [],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "completed",
+          "docs": "Settles when the GPU has finished every command so far, through a WebGL fence.",
+          "kind": "method",
+          "params": [],
+          "returns": "future<void>",
+          "fallible": true,
+          "blocking": false
+        }
+      ]
+    },
+    {
+      "name": "Buffer",
+      "docs": "A buffer object.",
+      "methods": [
+        {
+          "name": "size",
+          "kind": "method",
+          "params": [],
+          "returns": "i64",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "write",
+          "docs": "Writes `bytes` at `offset`.",
+          "kind": "method",
+          "params": [{ "name": "offset", "type": "i64" }, { "name": "bytes", "type": "bytes" }],
+          "returns": "void",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "read",
+          "docs": "Reads `length` bytes at `offset`, with `getBufferSubData`. It waits for the GPU to finish\nwriting them.",
+          "kind": "method",
+          "params": [{ "name": "offset", "type": "i64" }, { "name": "length", "type": "i64" }],
+          "returns": "bytes",
+          "fallible": true,
+          "blocking": false
+        }
+      ]
+    },
+    {
+      "name": "Texture",
+      "docs": "A 2D texture of one level.",
+      "methods": [
+        {
+          "name": "width",
+          "kind": "method",
+          "params": [],
+          "returns": "i32",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "height",
+          "kind": "method",
+          "params": [],
+          "returns": "i32",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "write",
+          "docs": "Writes a rectangle of pixels, rows tightly packed, bottom row first.",
+          "kind": "method",
+          "params": [{ "name": "x", "type": "i32" }, { "name": "y", "type": "i32" }, { "name": "width", "type": "i32" }, { "name": "height", "type": "i32" }, { "name": "pixels", "type": "bytes" }],
+          "returns": "void",
+          "fallible": true,
+          "blocking": false
+        }
+      ]
+    },
+    {
+      "name": "Sampler",
+      "docs": "A sampler object.",
+      "methods": []
+    },
+    {
+      "name": "Program",
+      "docs": "A linked program.",
+      "methods": [
+        {
+          "name": "uniform_block",
+          "docs": "Assigns the uniform block `name` to binding point `binding`. False when the program has no\nsuch block.",
+          "kind": "method",
+          "params": [{ "name": "name", "type": "str" }, { "name": "binding", "type": "i32" }],
+          "returns": "bool",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "sampler",
+          "docs": "Assigns the sampler uniform `name` to texture unit `unit`. False when the program has no\nsuch uniform. It leaves this program in use.",
+          "kind": "method",
+          "params": [{ "name": "name", "type": "str" }, { "name": "unit", "type": "i32" }],
+          "returns": "bool",
+          "fallible": false,
+          "blocking": false
+        }
+      ]
+    },
+    {
+      "name": "VertexArray",
+      "docs": "A vertex array: attribute layouts and the buffers they read, and an element buffer.",
+      "methods": [
+        {
+          "name": "attribute",
+          "docs": "Attribute `location` reads `size` components of `kind` from `buffer`, `stride` bytes\napart from `offset`, as floats; integer components become floats, scaled to 0-1 or -1-1\nwhen `normalized`.",
+          "kind": "method",
+          "params": [{ "name": "location", "type": "i32" }, { "name": "buffer", "type": "Buffer" }, { "name": "size", "type": "i32" }, { "name": "kind", "type": "ComponentType" }, { "name": "normalized", "type": "bool" }, { "name": "stride", "type": "i32" }, { "name": "offset", "type": "i32" }],
+          "returns": "void",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "integer_attribute",
+          "docs": "Attribute `location` reads `size` integer components of `kind`, for an `int` or `uint`\ninput.",
+          "kind": "method",
+          "params": [{ "name": "location", "type": "i32" }, { "name": "buffer", "type": "Buffer" }, { "name": "size", "type": "i32" }, { "name": "kind", "type": "ComponentType" }, { "name": "stride", "type": "i32" }, { "name": "offset", "type": "i32" }],
+          "returns": "void",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "divisor",
+          "docs": "Attribute `location` advances once per `divisor` instances; 0 advances per vertex.",
+          "kind": "method",
+          "params": [{ "name": "location", "type": "i32" }, { "name": "divisor", "type": "i32" }],
+          "returns": "void",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "element_buffer",
+          "docs": "The buffer `drawElements` reads indices from.",
+          "kind": "method",
+          "params": [{ "name": "buffer", "type": "Buffer" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        }
+      ]
+    },
+    {
+      "name": "Framebuffer",
+      "docs": "A framebuffer with one attachment.",
+      "methods": []
+    }
+  ]
+}
