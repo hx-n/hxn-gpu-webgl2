@@ -1,7 +1,7 @@
 {
   "name": "hxn-gpu-webgl2",
   "version": "0.1.0",
-  "description": "WebGL2 for Haxe in the browser, through hxcpp and Emscripten or Ash: buffers, textures, samplers, programs, vertex arrays and framebuffers",
+  "description": "WebGL2 for Haxe in the browser, on hxcpp and Ash compiled to wasm: buffers, textures, samplers, programs, vertex arrays and framebuffers",
   "url": "https://github.com/hx-n/hxn-gpu-webgl2",
   "license": "Apache",
   "tags": ["webgl2", "webgl", "gpu", "haxe", "graphics", "glsl", "wasm", "emscripten", "browser"],
