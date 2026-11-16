@@ -1,4 +1,4 @@
-package gpu.webgl2;
+package hxn.gpu.webgl2;
 
 #if (!macro && hxnsl)
 import hxnsl.Layout.GlslBindings;

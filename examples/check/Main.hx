@@ -1,4 +1,4 @@
-import gpu.webgl2.*;
+import hxn.gpu.webgl2.*;
 import haxe.io.Bytes;
 import Shaders;
 
@@ -62,7 +62,7 @@ class Main {
 
 	static function render(context:Context, next:() -> Void) {
 		var bindings = new Bindings(Tinted.GLSL_BINDINGS);
-		var program = gpu.webgl2.Shaders.program(context, Tinted.GLSL_VERTEX, Tinted.GLSL_FRAGMENT, bindings);
+		var program = hxn.gpu.webgl2.Shaders.program(context, Tinted.GLSL_VERTEX, Tinted.GLSL_FRAGMENT, bindings);
 		var positions = quad(context, [-1, -1, 1, -1, -1, 1, 1, 1]);
 		var vertices = context.createVertexArray();
 		vertices.attribute(Tinted.INPUT_position, positions, 2, ComponentType.Float, false, 8, 0);
@@ -91,7 +91,7 @@ class Main {
 
 	static function textured(context:Context) {
 		var bindings = new Bindings(Textured.GLSL_BINDINGS);
-		var program = gpu.webgl2.Shaders.program(context, Textured.GLSL_VERTEX, Textured.GLSL_FRAGMENT, bindings);
+		var program = hxn.gpu.webgl2.Shaders.program(context, Textured.GLSL_VERTEX, Textured.GLSL_FRAGMENT, bindings);
 		var corners = quad(context, [-1, -1, 0, 1, 1, -1, 1, 1, -1, 1, 0, 0, 1, 1, 1, 0]);
 		var vertices = context.createVertexArray();
 		vertices.attribute(Textured.INPUT_position, corners, 2, ComponentType.Float, false, 16, 0);

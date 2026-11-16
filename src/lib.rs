@@ -28,7 +28,7 @@ use std::sync::Arc;
 
 use hxn_future::Future;
 
-hxn::package!("gpu.webgl2");
+hxn::package!("hxn.gpu.webgl2");
 
 /// The OpenGL ES values this library passes, which WebGL2 shares.
 #[allow(dead_code)]

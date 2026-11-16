@@ -28,7 +28,7 @@ use the native drivers:
 ## Shaders
 
 Shaders are [hxnsl](https://github.com/hx-n/hxnsl) classes that implement
-`gpu.webgl2.Shader`, which extends `hxnsl.Shader`. The `SRC` block is
+`hxn.gpu.webgl2.Shader`, which extends `hxnsl.Shader`. The `SRC` block is
 written in HXSL. At compile time hxnsl adds static fields to the class, which
 hxnsl's README lists in full:
 
@@ -38,7 +38,7 @@ hxnsl's README lists in full:
   `TEXTURE_image` and `TEXTURE_image_GROUP`.
 
 ```haxe
-class Textured implements gpu.webgl2.Shader {
+class Textured implements hxn.gpu.webgl2.Shader {
 	static var SRC = {
 		@input var input : { position : Vec2, uv : Vec2 };
 		var output : { position : Vec4, color : Vec4 };
@@ -63,7 +63,7 @@ gets a `GLSL_MISSING` field, a string saying why, and no GLSL fields.
 ## Drawing
 
 ```haxe
-import gpu.webgl2.*;
+import hxn.gpu.webgl2.*;
 
 var context = Context.create();                   // throws without WebGL2 or a canvas
 context.setSize(640, 480);                        // the canvas's drawing buffer, in pixels
@@ -95,7 +95,7 @@ A texture `@param` is bound with `bindTexture`, as above. The shader's other
 value at its `PARAMS_<name>` offset:
 
 ```haxe
-class Tinted implements gpu.webgl2.Shader {
+class Tinted implements hxn.gpu.webgl2.Shader {
 	static var SRC = {
 		@input var input : { position : Vec2 };
 		var output : { position : Vec4, color : Vec4 };
@@ -179,7 +179,7 @@ it, so make those calls after drawing rather than between draws.
 
 ## Classes
 
-All in the package `gpu.webgl2`:
+All in the package `hxn.gpu.webgl2`:
 
 | Class | |
 |---|---|

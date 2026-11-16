@@ -40,8 +40,11 @@ const agent = {
   },
 };
 
-start(({ canvas }) => {
+start(({ canvas: page }) => {
   const roots = new Map([[3, agent]]);
+  // Without the web page's canvas, which another agent may hold, the context draws
+  // offscreen only, on a canvas of its own.
+  const canvas = page ?? (typeof OffscreenCanvas === "function" ? new OffscreenCanvas(1, 1) : null);
   if (!canvas) {
     missing = "the web page has no canvas for WebGL2";
     return roots;
@@ -55,4 +58,11 @@ start(({ canvas }) => {
   roots.set(1, gl);
   roots.set(2, canvas);
   return roots;
+}, (wire) => {
+  // A command that throws has no reply to carry the failure, so it goes to the shim,
+  // which ends the web page with it.
+  wire.error = (e, op) => {
+    console.error(`${op}:`, e);
+    self.postMessage({ fail: `${op}: ${e && e.stack !== undefined ? e.stack : e}` });
+  };
 });

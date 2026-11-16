@@ -1,7 +1,7 @@
 {
   "hxn": 1,
   "library": "gpu_webgl2",
-  "package": "gpu.webgl2",
+  "package": "hxn.gpu.webgl2",
   "enums": [
     {
       "name": "TextureFormat",
