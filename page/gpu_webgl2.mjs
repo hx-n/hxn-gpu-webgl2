@@ -1,5 +1,5 @@
-// The web page imports this when an Ash program's hxn-gpu-webgl2 asks for its browser agent through
-// `ash_host_agent("gpu_webgl2", mailbox)`. It starts the Worker that holds the WebGL2 context and
+// The web page imports this when a threaded program's hxn-gpu-webgl2, under Ash or Emscripten, asks
+// for its browser agent through `ash_host_agent("gpu_webgl2", mailbox)`. It starts the Worker that holds the WebGL2 context and
 // serves the program's mailbox, and hands it the page's canvas when the program first asks for it.
 
 let worker;
@@ -7,7 +7,7 @@ let worker;
 export function start({ memory, address, canvas, fail }) {
   if (worker) throw new Error("the WebGL2 browser agent is already running");
   if (!(memory.buffer instanceof SharedArrayBuffer)) {
-    throw new Error("hxn-gpu-webgl2 needs the program's memory shared: a threaded Ash build");
+    throw new Error("hxn-gpu-webgl2 needs the program's memory shared: a threaded build");
   }
   worker = new Worker(new URL("./gpu_webgl2_worker.mjs", import.meta.url), { type: "module" });
   // A command that throws in the Worker, or the Worker failing, ends the web page with the

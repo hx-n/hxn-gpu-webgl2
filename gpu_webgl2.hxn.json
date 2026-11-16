@@ -308,7 +308,7 @@
         },
         {
           "name": "claim_canvas",
-          "docs": "Takes the web page's canvas, which `present` shows the drawing buffer on. Under Ash\nthe context draws on a canvas of its own, and fails here when the page has no canvas\nor another browser agent holds it; under Emscripten it settles at once.",
+          "docs": "Takes the web page's canvas, which `present` shows the drawing buffer on. With threads\nthe context draws on a canvas of its own, and fails here when the page has no canvas\nor another browser agent holds it; without, it settles at once.",
           "kind": "method",
           "params": [],
           "returns": "future<void>",
@@ -317,7 +317,7 @@
         },
         {
           "name": "present",
-          "docs": "Shows what was drawn into the default framebuffer on the web page's canvas. Under\nEmscripten the browser shows it once the program returns to its event loop.",
+          "docs": "Shows what was drawn into the default framebuffer on the web page's canvas. Without\nthreads the browser shows it once the program returns to its event loop.",
           "kind": "method",
           "params": [],
           "returns": "void",

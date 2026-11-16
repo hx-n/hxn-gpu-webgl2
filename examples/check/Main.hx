@@ -24,12 +24,18 @@ class Main {
 			Sys.println('no WebGL2: ${e.message}');
 			return;
 		}
+		#if hxn_threads
+		// With threads the browser agent settles completed in a Worker of its own, so the
+		// program's thread can wait for it.
+		context.completed().await();
+		Sys.println("await: the context completed");
+		#end
 		// The render pass completes in a callback from the event loop, after main returns,
 		// and the other passes run from there.
 		render(context, () -> {
 			textured(context);
 			buffer(context);
-			// Under Ash the canvas is the browser agent's once claimed; under Emscripten at once.
+			// With threads the canvas is the browser agent's once claimed; without, Emscripten's at once.
 			context.claimCanvas().then(_ -> {
 				canvas(context);
 				context.close();

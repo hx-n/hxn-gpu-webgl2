@@ -3,9 +3,9 @@
 //! by unit and binding point. Shaders are hxnsl's GLSL ES 3.00, bound by the names hxnsl reports
 //! in `GLSL_BINDINGS`. WebGL2 has no compute shaders or storage buffers.
 //!
-//! Two backends, by how the program reaches the web page: under Emscripten, Emscripten's OpenGL
-//! ES 3.0 functions over the page's WebGL2 context; under a threaded Ash build, a wire of
-//! commands in shared memory, served by a browser agent the web page starts through
+//! Two backends, by how the program reaches the web page: without threads, Emscripten's OpenGL
+//! ES 3.0 functions over the page's WebGL2 context; with threads, under Ash or Emscripten, a
+//! wire of commands in shared memory, served by a browser agent the web page starts through
 //! `ash_host_agent`. This file is the API both share, and the one hxn generates the Haxe classes
 //! from.
 
@@ -13,14 +13,17 @@
     target_os = "emscripten",
     all(target_os = "wasi", target_feature = "atomics")
 ))]
-// The Ash backend's wire waits and notifies with wasm's atomics.
-#![cfg_attr(target_os = "wasi", feature(stdarch_wasm_atomic_wait))]
+// The browser agent backend's wire waits and notifies with wasm's atomics.
+#![cfg_attr(target_feature = "atomics", feature(stdarch_wasm_atomic_wait))]
 
-#[cfg(target_os = "emscripten")]
+// Without threads, Emscripten's WebGL2 on the page's thread.
+#[cfg(all(target_os = "emscripten", not(target_feature = "atomics")))]
 #[path = "emscripten.rs"]
 mod backend;
 
-#[cfg(target_os = "wasi")]
+// With threads, under Ash or Emscripten, a browser agent in a Worker of its own, so the
+// program's thread can wait for what the browser settles.
+#[cfg(target_feature = "atomics")]
 #[path = "agent/mod.rs"]
 mod backend;
 
@@ -531,15 +534,15 @@ impl Context {
         self.gl.finish();
     }
 
-    /// Takes the web page's canvas, which `present` shows the drawing buffer on. Under Ash
+    /// Takes the web page's canvas, which `present` shows the drawing buffer on. With threads
     /// the context draws on a canvas of its own, and fails here when the page has no canvas
-    /// or another browser agent holds it; under Emscripten it settles at once.
+    /// or another browser agent holds it; without, it settles at once.
     pub fn claim_canvas(&self) -> Future<()> {
         self.gl.claim_canvas()
     }
 
-    /// Shows what was drawn into the default framebuffer on the web page's canvas. Under
-    /// Emscripten the browser shows it once the program returns to its event loop.
+    /// Shows what was drawn into the default framebuffer on the web page's canvas. Without
+    /// threads the browser shows it once the program returns to its event loop.
     pub fn present(&self) {
         self.gl.present();
     }

@@ -217,10 +217,10 @@ is `getError`.
 
 `Context.completed()` returns an `hxn.Future`, from the hxn haxelib this one
 depends on. It settles once the GPU has finished every command issued before
-the call. Under Ash, `await` works: the context is held by the browser agent,
-not by the program's thread. Under hxcpp, with or without threads, use `then`
-rather than `await`: the thread that holds the context checks for the GPU to
-finish only while it is not blocked.
+the call. In a threaded build, under Ash or hxcpp, `await` works: the context
+is held by a browser agent in its own Worker, not by the program's thread.
+Without threads, use `then` rather than `await`: the thread that holds the
+context checks for the GPU to finish only while it is not blocked.
 
 ## Building from source
 
@@ -238,7 +238,7 @@ hxn check hl --wasm --threads --browser
 
 CI runs each on macOS with the runner's GPU and on Linux with SwiftShader.
 
-Under Ash, the library encodes each WebGL call into the program's memory
+In a threaded build, the library encodes each WebGL call into the program's memory
 (`src/agent/wire.rs`), and the browser agent decodes and runs it
 (`page/gpu_webgl2_service.mjs`). Both files are generated from the WebGL IDL
 in `tools/wire/idl/`. After changing the IDL, regenerate them with:

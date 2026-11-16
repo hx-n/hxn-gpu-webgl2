@@ -142,16 +142,16 @@ class Context {
 		HxnGpuWebgl2Native.context_finish(hxnRaw);
 
 	/**
-		Takes the web page's canvas, which `present` shows the drawing buffer on. Under Ash
+		Takes the web page's canvas, which `present` shows the drawing buffer on. With threads
 		the context draws on a canvas of its own, and fails here when the page has no canvas
-		or another browser agent holds it; under Emscripten it settles at once.
+		or another browser agent holds it; without, it settles at once.
 	**/
 	public function claimCanvas():hxn.Future<hxn.Unit>
 		return HxnGpuWebgl2Future.ofUnit(HxnGpuWebgl2Native.context_claim_canvas(hxnRaw));
 
 	/**
-		Shows what was drawn into the default framebuffer on the web page's canvas. Under
-		Emscripten the browser shows it once the program returns to its event loop.
+		Shows what was drawn into the default framebuffer on the web page's canvas. Without
+		threads the browser shows it once the program returns to its event loop.
 	**/
 	public function present():Void
 		HxnGpuWebgl2Native.context_present(hxnRaw);

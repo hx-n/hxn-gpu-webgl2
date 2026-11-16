@@ -20,12 +20,14 @@ haxe-flags = ["-lib", "hxnsl"]
 # Registers hxnsl's GLSL target for hxn.gpu.webgl2.Shader, from sources/.
 init = ["hxn.gpu.webgl2.Shaders.register()"]
 
-# Emscripten's OpenGL ES 3.0 is WebGL2. A threaded build runs main on a
-# pthread, which the web page's canvas is transferred to.
+# Emscripten's OpenGL ES 3.0 is WebGL2. A threaded build uses the browser
+# agent instead, which takes the canvas when the program claims it.
 [package.metadata.hxn.link-args]
 wasm32-unknown-emscripten = ["-sMIN_WEBGL_VERSION=2", "-sMAX_WEBGL_VERSION=2"]
-wasm32-unknown-emscripten-threads = ["-sOFFSCREENCANVAS_SUPPORT"]
 
 [dependencies]
 hxn = { git = "https://github.com/hx-n/hxn.git", tag = "v0.3.5" }
 hxn-future = { git = "https://github.com/hx-n/hxn.git", tag = "v0.3.5" }
+
+[build-dependencies]
+cc = "1"
