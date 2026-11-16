@@ -1,6 +1,6 @@
 [package]
 name = "hxn-gpu-webgl2"
-version = "0.3.1"
+version = "0.3.2"
 edition = "2024"
 description = "WebGL2 for Haxe in the browser, on hxcpp and Ash compiled to wasm: buffers, textures, samplers, programs, vertex arrays and framebuffers"
 repository = "https://github.com/hx-n/hxn-gpu-webgl2"
@@ -14,7 +14,7 @@ name = "hxn_gpu_webgl2"
 library = "gpu_webgl2"
 haxelib = "hxn-gpu-webgl2"
 contributors = ["darmie", "rayzor"]
-releasenote = "In a threaded hxcpp build WebGL2 runs in a browser agent, as under Ash, and await works on what the browser settles. Needs hxn 0.3.6."
+releasenote = "Documents await under Ash from 0.1.21, which runs a library's watch handlers while the program's thread waits; with threads, await now works under Ash as under hxcpp. No code changes."
 haxe = "examples/check"
 haxe-flags = ["-lib", "hxnsl"]
 # Registers hxnsl's GLSL target for hxn.gpu.webgl2.Shader, from sources/.
