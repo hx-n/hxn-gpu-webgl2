@@ -1,8 +1,8 @@
 name: Browser
 
 # The check as a web page in headless Chrome, with WebGL2 on the runner's GPU
-# on macOS and SwiftShader on Linux: hxcpp through Emscripten, served by
-# emrun, and a threaded Ash program, served by `ash serve`, whose WebGL2
+# on macOS and SwiftShader on Linux, compiled to wasm with hxcpp and served by
+# emrun, and with Ash, threaded, and served by `ash serve`, whose WebGL2
 # browser agent runs in a Worker of its own.
 on:
   push:
@@ -32,6 +32,13 @@ jobs:
           - os: ubuntu-latest
             runtime: hxcpp
             check: cpp --wasm
+            flags: --enable-unsafe-swiftshader --use-angle=swiftshader
+          - os: macos-latest
+            runtime: hxcpp threaded
+            check: cpp --wasm --threads
+          - os: ubuntu-latest
+            runtime: hxcpp threaded
+            check: cpp --wasm --threads
             flags: --enable-unsafe-swiftshader --use-angle=swiftshader
           - os: macos-latest
             runtime: Ash

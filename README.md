@@ -12,7 +12,7 @@ context on the web page's canvas. The library is written in Rust.
 
 | Runtime | Browser support |
 |---|---|
-| hxcpp | Supported. Compile with `-cpp -D emscripten`. |
+| hxcpp | Supported, with or without threads. Compile with `-cpp -D emscripten`, and add `-D hxn_threads` for threads. |
 | [Ash](https://github.com/rayzor-blade/ash) | Supported in threaded builds. Compile with `-hl -D wasm -D hxn_threads`. |
 | HashLink | Not supported: the HashLink VM does not run in a browser. Use Ash. |
 | CPPIA | Not supported: the script host is a native hxcpp program. |
@@ -145,7 +145,18 @@ prebuilt for `wasm32-unknown-emscripten` and links it with WebGL2
 needed. The context is made on the element with the id `canvas`. Emscripten's
 default HTML page has one; a page of your own needs a `<canvas id="canvas">`.
 
-For Ash 0.1.18 or later, the program is compiled with `-D wasm -D
+With `-D hxn_threads`, the program links the library built for threaded wasm
+and runs on Emscripten's pthreads. Its `main` runs on a pthread, and the
+canvas is transferred to that thread, which holds the context. A threaded
+program uses shared memory, so the web page must be served with cross-origin
+isolation headers (COOP/COEP), which `emrun` sends:
+
+```
+haxe -lib hxn-gpu-webgl2 -lib hxnsl -main Main -cpp out -D emscripten -D hxn_threads -D disable_unicode_strings -D HXCPP_LINK_EMSCRIPTEN_EXT=.html
+emrun out/Main.html
+```
+
+For Ash 0.1.19 or later, the program is compiled with `-D wasm -D
 hxn_threads`, which selects the library built for threaded wasm. Compiling
 copies the library, `libgpu_webgl2.a`, and its JavaScript files next to
 `main.hl`. `ash --build` links the library into `main.wasm` and writes a web
@@ -189,9 +200,10 @@ is `getError`.
 
 `Context.completed()` returns an `hxn.Future`, from the hxn haxelib this one
 depends on. It settles once the GPU has finished every command issued before
-the call. Under Ash, `await` works: the program runs in a Worker, so waiting
-does not block the web page. Under hxcpp, use `then` rather than `await`:
-`await` blocks the web page's only thread.
+the call. Under Ash, `await` works: the context is held by the browser agent,
+not by the program's thread. Under hxcpp, with or without threads, use `then`
+rather than `await`: the thread that holds the context checks for the GPU to
+finish only while it is not blocked.
 
 ## Building from source
 
@@ -203,10 +215,11 @@ page, opens it in headless Chrome and prints what the program prints:
 
 ```
 hxn check cpp --wasm --browser
+hxn check cpp --wasm --threads --browser
 hxn check hl --wasm --threads --browser
 ```
 
-CI runs both on macOS with the runner's GPU and on Linux with SwiftShader.
+CI runs each on macOS with the runner's GPU and on Linux with SwiftShader.
 
 Under Ash, the library encodes each WebGL call into the program's memory
 (`src/agent/wire.rs`), and the browser agent decodes and runs it

@@ -620,7 +620,8 @@ impl Gl {
         unsafe { glFinish() };
     }
 
-    /// Settles when a fence put in now has signaled, polled from the page's event loop.
+    /// Settles when a fence put in now has signaled, polled from the event loop of the thread that
+    /// holds the context.
     pub fn completed(&self) -> Result<hxn_future::Future<()>, String> {
         let sync = unsafe { glFenceSync(SYNC_GPU_COMMANDS_COMPLETE, 0) };
         if sync.is_null() {

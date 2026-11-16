@@ -1,6 +1,6 @@
 ---
 name: hxn-gpu-webgl2
-description: Drive the GPU from Haxe in the browser through WebGL2 with the hxn-gpu-webgl2 haxelib (package `gpu.webgl2`), for hxcpp programs compiled to wasm with `-D emscripten` and threaded Ash programs (`-D wasm -D hxn_threads`); HashLink and CPPIA do not run in a browser. Use when a Haxe program in a web page renders with WebGL2, for browsers without WebGPU, or uses HXSL shaders from hxnsl as GLSL ES 3.00.
+description: Drive the GPU from Haxe in the browser through WebGL2 with the hxn-gpu-webgl2 haxelib (package `gpu.webgl2`), for hxcpp programs compiled to wasm with `-D emscripten`, threaded or not, and threaded Ash programs (`-D wasm -D hxn_threads`); HashLink and CPPIA do not run in a browser. Use when a Haxe program in a web page renders with WebGL2, for browsers without WebGPU, or uses HXSL shaders from hxnsl as GLSL ES 3.00.
 ---
 
 # hxn-gpu-webgl2
@@ -16,9 +16,12 @@ haxe -lib hxn-gpu-webgl2 -lib hxnsl -main Main -cpp out -D emscripten -D disable
 Needs the Emscripten SDK on `PATH` and hxcpp from git (its Emscripten
 toolchain uses wasm exceptions). Serve `out/` and open `Main.html`. The
 context is made on the element with id `canvas`, which Emscripten's default
-HTML page has; a page of your own needs a `<canvas id="canvas">`.
+HTML page has; a page of your own needs a `<canvas id="canvas">`. Add
+`-D hxn_threads` for threads: `main` then runs on a pthread that holds the
+canvas, and the web page needs cross-origin isolation headers (COOP/COEP),
+which `emrun out/Main.html` sends.
 
-Ash (0.1.18 or later), threaded:
+Ash (0.1.19 or later), threaded:
 
 ```
 haxe -lib hxn-gpu-webgl2 -lib hxnsl -main Main -hl out/main.hl -D wasm -D hxn_threads
@@ -87,8 +90,9 @@ context.bindUniformBuffer(bindings.uniformBlock(Tinted.PARAMS_GROUP, Tinted.PARA
   the canvas before returning.
 - Draws and copies run in the order they are made. Wait only to read on the
   CPU: `completed()` (an `hxn.Future`, settled once the GPU has finished every
-  command issued before the call) or `finish()`. Under Ash `await` works, since the program runs in a Worker.
-  Under hxcpp use `then`: `await` blocks the web page's only thread.
+  command issued before the call) or `finish()`. Under Ash `await` works,
+  since the browser agent holds the context. Under hxcpp, threaded or not,
+  use `then`: the context's thread checks the fence only while not blocked.
 - Binding points and texture units come from `Bindings`, keyed by hxnsl's
   group and binding; `Shaders.program` assigns them by name.
 - `Program.uniformBlock` and `Program.sampler` assign bindings by name;
@@ -111,7 +115,8 @@ reads a buffer, and clears the web page's canvas and reads it back.
 
 ## Working on this repository
 
-Test with the hxn CLI and hxnsl: `hxn check cpp --wasm --browser` and
+Test with the hxn CLI and hxnsl: `hxn check cpp --wasm --browser`,
+`hxn check cpp --wasm --threads --browser` and
 `hxn check hl --wasm --threads --browser`, which need Chrome and node 22.
 The Ash backend's calls are encoded by `src/agent/wire.rs` and made by the
 browser agent's `page/gpu_webgl2_service.mjs`, both generated from the WebGL
