@@ -24,8 +24,8 @@ class Main {
 			Sys.println('no WebGL2: ${e.message}');
 			return;
 		}
-		#if (emscripten && hxn_threads)
-		// In a threaded Emscripten build the browser agent settles completed in a Worker of its own, so the
+		#if hxn_threads
+		// With threads the browser agent answers completed in a Worker of its own, so the
 		// program's thread can wait for it.
 		context.completed().await();
 		Sys.println("await: the context completed");

@@ -217,11 +217,10 @@ is `getError`.
 
 `Context.completed()` returns an `hxn.Future`, from the hxn haxelib this one
 depends on. It settles once the GPU has finished every command issued before
-the call. In a threaded hxcpp build, `await` works: a browser agent in its own
-Worker holds the context, and a thread of the library settles the future.
-Otherwise use `then` rather than `await`. Without threads the thread that
-holds the context checks for the GPU to finish only while it is not blocked;
-under Ash the answer is settled on the program's thread, which `await` blocks.
+the call. In a threaded build, `await` works (under Ash, from 0.1.21): a
+browser agent in its own Worker holds the context, not the program's thread.
+Without threads, use `then` rather than `await`: the thread that holds the
+context checks for the GPU to finish only while it is not blocked.
 
 ## Building from source
 
