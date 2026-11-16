@@ -4,7 +4,7 @@
   "description": "WebGL2 for Haxe in the browser, on hxcpp and Ash compiled to wasm: buffers, textures, samplers, programs, vertex arrays and framebuffers",
   "url": "https://github.com/hx-n/hxn-gpu-webgl2",
   "license": "Apache",
-  "tags": ["webgl2", "webgl", "gpu", "haxe", "graphics", "glsl", "wasm", "emscripten", "browser"],
+  "tags": ["webgl2", "webgl", "gpu", "haxe", "graphics", "glsl", "wasm", "emscripten", "browser", "hxcpp", "hashlink", "native", "cross"],
   "contributors": ["darmie", "rayzor"],
   "releasenote": "Context.claimCanvas and Context.present: under Ash the context draws on a canvas of its own and shows its frames on the web page's once claimed, so the page can carry other browser agents, such as WebGPU's.",
   "dependencies": { "hxn": "0.3.5" }

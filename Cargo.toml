@@ -5,7 +5,7 @@ edition = "2024"
 description = "WebGL2 for Haxe in the browser, on hxcpp and Ash compiled to wasm: buffers, textures, samplers, programs, vertex arrays and framebuffers"
 repository = "https://github.com/hx-n/hxn-gpu-webgl2"
 license = "Apache-2.0"
-keywords = ["webgl2", "webgl", "gpu", "haxe", "graphics", "glsl", "wasm", "emscripten", "browser"]
+keywords = ["webgl2", "webgl", "gpu", "haxe", "graphics", "glsl", "wasm", "emscripten", "browser", "hxcpp", "hashlink", "native", "cross"]
 
 [lib]
 name = "hxn_gpu_webgl2"
