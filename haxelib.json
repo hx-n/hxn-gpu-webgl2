@@ -6,6 +6,6 @@
   "license": "Apache",
   "tags": ["webgl2", "webgl", "gpu", "haxe", "graphics", "glsl", "wasm", "emscripten", "browser"],
   "contributors": ["darmie", "rayzor"],
-  "releasenote": "First release.",
-  "dependencies": { "hxn": "0.3.3" }
+  "releasenote": "First release: WebGL2 in the browser, for hxcpp programs compiled to wasm with or without threads and for threaded Ash programs: a context on the web page's canvas, buffers, textures, samplers, programs from hxnsl's GLSL ES 3.00 with their binding points and texture units, vertex arrays, framebuffers, and a future for the GPU finishing.",
+  "dependencies": { "hxn": "0.3.4" }
 }
