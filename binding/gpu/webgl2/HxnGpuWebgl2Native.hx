@@ -23,6 +23,10 @@ package gpu.webgl2;
 </target>
 <!-- After the archive: a linker that reads libraries in order looks in them only for what is already undefined. -->
 <include name="${GPU_WEBGL2_LINK}" if="GPU_WEBGL2_LINK"/>
+<section if="emscripten hxn_threads">
+	<compiler id="emscripten"><flag value="-pthread"/></compiler>
+	<linker id="exe"><flag value="-pthread"/><flag value="-sPTHREAD_POOL_SIZE=8"/><flag value="-sALLOW_MEMORY_GROWTH=1"/><flag value="-sPROXY_TO_PTHREAD"/><flag value="-sEXIT_RUNTIME=1"/></linker>
+</section>
 ')
 @:noCompletion class HxnGpuWebgl2Native {
 	static function memory_held():Float;
