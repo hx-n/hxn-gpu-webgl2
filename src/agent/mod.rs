@@ -760,6 +760,23 @@ impl Gl {
         s.flush();
     }
 
+    pub fn claim_canvas(&self) -> Future<()> {
+        let (completer, future) = hxn_future::pending();
+        let mut s = state();
+        let answer = Answer::new(1024);
+        s.commands
+            .web_gl2agent_claim_canvas(AGENT_HELPERS, answer.at(), &GL);
+        s.pending.push((answer, completer));
+        s.flush();
+        future
+    }
+
+    pub fn present(&self) {
+        let mut s = state();
+        s.commands.web_gl2agent_present(AGENT_HELPERS, &GL);
+        s.flush();
+    }
+
     pub fn completed(&self) -> Result<Future<()>, String> {
         let (completer, future) = hxn_future::pending();
         let mut s = state();

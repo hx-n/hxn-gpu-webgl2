@@ -5847,13 +5847,28 @@ impl Encoder {
         gl.encode(self);
         self.end(at);
     }
+    /// `WebGL2Agent.claimCanvas`.
+    pub fn web_gl2agent_claim_canvas(&mut self, this: Handle, reply: u32, gl: &Handle) {
+        let at = self.begin(376);
+        this.encode(self);
+        self.u32(reply);
+        gl.encode(self);
+        self.end(at);
+    }
+    /// `WebGL2Agent.present`.
+    pub fn web_gl2agent_present(&mut self, this: Handle, gl: &Handle) {
+        let at = self.begin(377);
+        this.encode(self);
+        gl.encode(self);
+        self.end(at);
+    }
     /// Forget the object kept under `this`.
     pub fn release(&mut self, this: Handle) {
-        let at = self.begin(376);
+        let at = self.begin(378);
         this.encode(self);
         self.end(at);
     }
 }
 
 /// The number of operations the wire carries.
-pub const OPS: u32 = 377;
+pub const OPS: u32 = 379;

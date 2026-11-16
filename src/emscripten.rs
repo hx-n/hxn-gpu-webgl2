@@ -622,6 +622,16 @@ impl Gl {
 
     /// Settles when a fence put in now has signaled, polled from the event loop of the thread that
     /// holds the context.
+    /// The program holds the canvas under Emscripten, so the claim settles at once.
+    pub fn claim_canvas(&self) -> hxn_future::Future<()> {
+        let (completer, future) = hxn_future::pending();
+        completer.resolve(());
+        future
+    }
+
+    /// The browser shows the canvas once the program returns to its event loop.
+    pub fn present(&self) {}
+
     pub fn completed(&self) -> Result<hxn_future::Future<()>, String> {
         let sync = unsafe { glFenceSync(SYNC_GPU_COMMANDS_COMPLETE, 0) };
         if sync.is_null() {

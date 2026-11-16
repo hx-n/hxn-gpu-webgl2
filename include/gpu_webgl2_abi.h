@@ -38,6 +38,8 @@ hxn_status hxn_gpu_webgl2_context_draw_elements(hxn_handle *self, int32_t primit
 hxn_status hxn_gpu_webgl2_context_read_pixels(hxn_handle *self, int32_t x, int32_t y, int32_t width, int32_t height, hxn_buf *out, hxn_buf *err);
 hxn_status hxn_gpu_webgl2_context_flush(hxn_handle *self, hxn_buf *err);
 hxn_status hxn_gpu_webgl2_context_finish(hxn_handle *self, hxn_buf *err);
+hxn_status hxn_gpu_webgl2_context_claim_canvas(hxn_handle *self, hxn_handle **out, hxn_buf *err);
+hxn_status hxn_gpu_webgl2_context_present(hxn_handle *self, hxn_buf *err);
 hxn_status hxn_gpu_webgl2_context_completed(hxn_handle *self, hxn_handle **out, hxn_buf *err);
 hxn_status hxn_gpu_webgl2_context_drop(hxn_handle *self, hxn_buf *err);
 

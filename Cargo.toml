@@ -1,6 +1,6 @@
 [package]
 name = "hxn-gpu-webgl2"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2024"
 description = "WebGL2 for Haxe in the browser, on hxcpp and Ash compiled to wasm: buffers, textures, samplers, programs, vertex arrays and framebuffers"
 repository = "https://github.com/hx-n/hxn-gpu-webgl2"
@@ -14,7 +14,7 @@ name = "hxn_gpu_webgl2"
 library = "gpu_webgl2"
 haxelib = "hxn-gpu-webgl2"
 contributors = ["darmie", "rayzor"]
-releasenote = "Moves to the hxn.gpu.webgl2 package, on hxn 0.3.5. Under Ash, the context draws offscreen on a canvas of its own when another agent holds the web page's, and a command that throws or a browser agent that fails ends the web page with the reason."
+releasenote = "Context.claimCanvas and Context.present: under Ash the context draws on a canvas of its own and shows its frames on the web page's once claimed, so the page can carry other browser agents, such as WebGPU's."
 haxe = "examples/check"
 haxe-flags = ["-lib", "hxnsl"]
 # Registers hxnsl's GLSL target for hxn.gpu.webgl2.Shader, from sources/.

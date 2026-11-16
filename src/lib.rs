@@ -531,6 +531,19 @@ impl Context {
         self.gl.finish();
     }
 
+    /// Takes the web page's canvas, which `present` shows the drawing buffer on. Under Ash
+    /// the context draws on a canvas of its own, and fails here when the page has no canvas
+    /// or another browser agent holds it; under Emscripten it settles at once.
+    pub fn claim_canvas(&self) -> Future<()> {
+        self.gl.claim_canvas()
+    }
+
+    /// Shows what was drawn into the default framebuffer on the web page's canvas. Under
+    /// Emscripten the browser shows it once the program returns to its event loop.
+    pub fn present(&self) {
+        self.gl.present();
+    }
+
     /// Settles when the GPU has finished every command so far, through a WebGL fence.
     pub fn completed(&self) -> Result<Future<()>, String> {
         self.gl.completed()

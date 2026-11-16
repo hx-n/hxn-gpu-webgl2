@@ -1,7 +1,8 @@
 // What the browser agent answers for the library beyond WebGL's own calls:
 // the queries WebGL answers as `any`, a uniform's lookup and assignment in one
-// call, and a promise settled once the GPU has finished. The browser agent
-// keeps an object implementing it under handle 3.
+// call, a promise settled once the GPU has finished, and the web page's canvas,
+// claimed when the program first asks for it and shown a frame of the context
+// at a time. The browser agent keeps an object implementing it under handle 3.
 
 [Exposed=Worker]
 interface WebGL2Agent {
@@ -10,4 +11,6 @@ interface WebGL2Agent {
   DOMString parameter(WebGL2RenderingContext gl, GLenum name);
   boolean samplerUnit(WebGL2RenderingContext gl, WebGLProgram program, DOMString name, GLint unit);
   Promise<undefined> completed(WebGL2RenderingContext gl);
+  Promise<undefined> claimCanvas(WebGL2RenderingContext gl);
+  undefined present(WebGL2RenderingContext gl);
 };

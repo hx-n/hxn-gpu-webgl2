@@ -307,6 +307,24 @@
           "blocking": false
         },
         {
+          "name": "claim_canvas",
+          "docs": "Takes the web page's canvas, which `present` shows the drawing buffer on. Under Ash\nthe context draws on a canvas of its own, and fails here when the page has no canvas\nor another browser agent holds it; under Emscripten it settles at once.",
+          "kind": "method",
+          "params": [],
+          "returns": "future<void>",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "present",
+          "docs": "Shows what was drawn into the default framebuffer on the web page's canvas. Under\nEmscripten the browser shows it once the program returns to its event loop.",
+          "kind": "method",
+          "params": [],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
           "name": "completed",
           "docs": "Settles when the GPU has finished every command so far, through a WebGL fence.",
           "kind": "method",

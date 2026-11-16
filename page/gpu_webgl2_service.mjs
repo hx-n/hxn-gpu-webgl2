@@ -3484,7 +3484,22 @@ export const OPS = [
     try { p = self.completed(a0); } catch (e) { wire.reply(reply, 2, message(e)); return; }
     p.then((v) => { wire.reply(reply, 1, null); }, (e) => wire.reply(reply, 2, message(e)));
   },
-  // 376: release
+  // 376: WebGL2Agent.claimCanvas
+  (wire, r) => {
+    const self = wire.get(r.u32());
+    const reply = r.u32();
+    const a0 = r.object();
+    let p;
+    try { p = self.claimCanvas(a0); } catch (e) { wire.reply(reply, 2, message(e)); return; }
+    p.then((v) => { wire.reply(reply, 1, null); }, (e) => wire.reply(reply, 2, message(e)));
+  },
+  // 377: WebGL2Agent.present
+  (wire, r) => {
+    const self = wire.get(r.u32());
+    const a0 = r.object();
+    self.present(a0);
+  },
+  // 378: release
   (wire, r) => {
     wire.objects.delete(r.u32());
   },
@@ -3867,5 +3882,7 @@ export const NAMES = [
   "WebGL2Agent.parameter",
   "WebGL2Agent.samplerUnit",
   "WebGL2Agent.completed",
+  "WebGL2Agent.claimCanvas",
+  "WebGL2Agent.present",
   "release",
 ];

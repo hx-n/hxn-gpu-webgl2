@@ -117,9 +117,24 @@ var uniforms = context.createBufferWith(BufferTarget.Uniform, params, Usage.Stat
 context.bindUniformBuffer(bindings.uniformBlock(Tinted.PARAMS_GROUP, Tinted.PARAMS_BINDING), uniforms);
 ```
 
-The browser shows what was drawn on the canvas once the code that drew it
-returns to the browser, and clears the canvas after showing it. To read the
-canvas back, call `readPixels` before returning.
+To draw on the web page's canvas, claim it first: `context.claimCanvas()`
+returns an `hxn.Future` that settles once the canvas is the context's, and
+fails when the page has none or another browser agent holds it. Each frame,
+draw into the default framebuffer, then call `context.present()`:
+
+```haxe
+context.claimCanvas().then(_ -> {
+	context.setSize(640, 480);
+	context.bindDefaultFramebuffer();
+	// ... draws ...
+	context.present();
+});
+```
+
+Under Emscripten the program holds the canvas, the claim settles at once, and
+the browser shows what was drawn once the code returns to it, clearing the
+canvas after; `present` does nothing there. To read the canvas back, call
+`readPixels` before `present` and before returning.
 
 [`examples/check/Main.hx`](https://github.com/hx-n/hxn-gpu-webgl2/blob/main/examples/check/Main.hx)
 renders into a texture and reads it back once the GPU has finished, samples a
@@ -156,7 +171,7 @@ haxe -lib hxn-gpu-webgl2 -lib hxnsl -main Main -cpp out -D emscripten -D hxn_thr
 emrun out/Main.html
 ```
 
-For Ash 0.1.19 or later, the program is compiled with `-D wasm -D
+For Ash 0.1.20 or later, the program is compiled with `-D wasm -D
 hxn_threads`, which selects the library built for threaded wasm. Compiling
 copies the library, `libgpu_webgl2.a`, and its JavaScript files next to
 `main.hl`. `ash --build` links the library into `main.wasm` and writes a web
@@ -172,7 +187,9 @@ A threaded program uses shared memory, so the web page must be served with
 cross-origin isolation headers (COOP/COEP), which `ash serve` sends. Under
 Ash, the program runs in a Worker, and the WebGL2 context is held by a browser
 agent: a second Worker that the web page Ash writes starts with the library's
-JavaScript files, and hands the page's canvas. A call that returns a value
+JavaScript files. The context draws on a canvas of its own there; the page
+hands the agent its canvas when the program claims it, and `present` shows
+each frame on it, so several agents, such as WebGPU's, can share one page. A call that returns a value
 (`readPixels`, `Buffer.read`, `error`, and the compile and link checks in
 `Shaders.program`) waits for the browser agent to run every call made before
 it, so make those calls after drawing rather than between draws.
@@ -183,7 +200,7 @@ All in the package `hxn.gpu.webgl2`:
 
 | Class | |
 |---|---|
-| `Context` | `create()` on the web page's canvas, `setSize`, `width` and `height`; object creation, framebuffer and program binding, draws, `readPixels`, `finish` and `completed`. |
+| `Context` | `create()`, `claimCanvas()` and `present()` for the web page's canvas, `setSize`, `width` and `height`; object creation, framebuffer and program binding, draws, `readPixels`, `finish` and `completed`. |
 | `Buffer` | `write`, and `read` with `getBufferSubData`. |
 | `Texture` | A 2D texture of one level with immutable storage, `write` by rectangle. |
 | `Sampler` | Filters and wrap modes, bound to a texture unit with a texture. |

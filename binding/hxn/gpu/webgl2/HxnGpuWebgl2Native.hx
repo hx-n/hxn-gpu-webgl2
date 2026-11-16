@@ -60,6 +60,8 @@ package hxn.gpu.webgl2;
 	static function context_read_pixels(self:hxn.Handle, x:Int, y:Int, width:Int, height:Int):haxe.io.Bytes;
 	static function context_flush(self:hxn.Handle):Void;
 	static function context_finish(self:hxn.Handle):Void;
+	static function context_claim_canvas(self:hxn.Handle):hxn.Handle;
+	static function context_present(self:hxn.Handle):Void;
 	static function context_completed(self:hxn.Handle):hxn.Handle;
 	static function context_drop(self:hxn.Handle):Void;
 	static function buffer_size(self:hxn.Handle):haxe.Int64;

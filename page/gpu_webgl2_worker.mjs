@@ -24,6 +24,25 @@ const agent = {
     gl.uniform1i(location, unit);
     return true;
   },
+  // Takes the web page's canvas, which `present` then shows the context's frames on.
+  claimCanvas(gl) {
+    if (shown) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      claimed = (canvas) => {
+        if (!canvas) return reject(new Error("the web page has no canvas, or another hxn browser agent holds it"));
+        shown = canvas.getContext("bitmaprenderer");
+        resolve();
+      };
+      self.postMessage({ claim: true });
+    });
+  },
+  // Shows the context's drawing buffer on the claimed canvas, at its size.
+  present(gl) {
+    if (!shown) throw new Error("present needs the web page's canvas: claim it first");
+    shown.canvas.width = gl.canvas.width;
+    shown.canvas.height = gl.canvas.height;
+    shown.transferFromImageBitmap(gl.canvas.transferToImageBitmap());
+  },
   completed(gl) {
     const sync = context(gl).fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0);
     gl.flush();
@@ -40,13 +59,23 @@ const agent = {
   },
 };
 
-start(({ canvas: page }) => {
+// The bitmap renderer of the web page's canvas once claimed, and the page's answer to a claim.
+let shown = null;
+let claimed = null;
+self.addEventListener("message", ({ data }) => {
+  if (data && data.claimed !== undefined && claimed) {
+    const settle = claimed;
+    claimed = null;
+    settle(data.claimed);
+  }
+});
+
+start(() => {
   const roots = new Map([[3, agent]]);
-  // Without the web page's canvas, which another agent may hold, the context draws
-  // offscreen only, on a canvas of its own.
-  const canvas = page ?? (typeof OffscreenCanvas === "function" ? new OffscreenCanvas(1, 1) : null);
+  // The context draws on a canvas of its own, and `present` shows its frames on the page's.
+  const canvas = typeof OffscreenCanvas === "function" ? new OffscreenCanvas(1, 1) : null;
   if (!canvas) {
-    missing = "the web page has no canvas for WebGL2";
+    missing = "this browser has no OffscreenCanvas for WebGL2 in a Worker";
     return roots;
   }
   const gl = canvas.getContext("webgl2", { antialias: false });

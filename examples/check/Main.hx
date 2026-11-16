@@ -29,8 +29,14 @@ class Main {
 		render(context, () -> {
 			textured(context);
 			buffer(context);
-			canvas(context);
-			context.close();
+			// Under Ash the canvas is the browser agent's once claimed; under Emscripten at once.
+			context.claimCanvas().then(_ -> {
+				canvas(context);
+				context.close();
+			}, e -> {
+				Sys.println('failed: ${e.message}');
+				hxn.Loop.exit(1);
+			});
 		});
 		Sys.println("render: submitted");
 	}
@@ -138,6 +144,7 @@ class Main {
 		context.viewport(0, 0, 64, 64);
 		context.clear(ClearBits.Color, 1, 0, 0, 1);
 		readTarget(context, 64, [255, 0, 0, 255], "canvas");
+		context.present();
 		Sys.println('canvas: a ${context.width()}x${context.height()} frame cleared to red');
 		var error = context.error();
 		check(error == 0, 'WebGL error 0x${StringTools.hex(error)}');

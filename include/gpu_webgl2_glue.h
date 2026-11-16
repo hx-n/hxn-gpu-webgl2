@@ -196,6 +196,18 @@ inline void context_finish(void *self) {
 	hxn::check(hxn_gpu_webgl2_context_finish((hxn_handle *)self, &err), err);
 }
 
+inline void *context_claim_canvas(void *self) {
+	hxn_handle *out = 0;
+	hxn_buf err = HXN_BUF_EMPTY;
+	hxn::check(hxn_gpu_webgl2_context_claim_canvas((hxn_handle *)self, &out, &err), err);
+	return out;
+}
+
+inline void context_present(void *self) {
+	hxn_buf err = HXN_BUF_EMPTY;
+	hxn::check(hxn_gpu_webgl2_context_present((hxn_handle *)self, &err), err);
+}
+
 inline void *context_completed(void *self) {
 	hxn_handle *out = 0;
 	hxn_buf err = HXN_BUF_EMPTY;
