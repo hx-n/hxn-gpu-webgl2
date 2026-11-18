@@ -2,9 +2,10 @@
 package hxn.gpu.webgl2;
 
 /** A linked program. **/
+@:build(hxn.Log.bind())
 class Program {
 	@:noCompletion public var hxnRaw:hxn.Handle;
-	@:noCompletion static final hxnMemory = HxnGpuWebgl2Memory.meter;
+	@:keep @:noCompletion static final hxnMemory = HxnGpuWebgl2Memory.meter;
 
 	/** An object for a value the library returned. **/
 	@:noCompletion public static function hxnAdopt(hxnRaw:hxn.Handle):Program {

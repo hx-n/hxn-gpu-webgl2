@@ -253,6 +253,7 @@ impl Context {
     /// A WebGL2 context on the web page's canvas. Throws when the browser has no WebGL2 or the
     /// page no canvas.
     pub fn create() -> Result<Context, String> {
+        hxn::log::debug!(target: "hxn.gpu.webgl2", "opening a browser WebGL2 context");
         Ok(Context {
             gl: Arc::new(backend::Gl::open()?),
         })

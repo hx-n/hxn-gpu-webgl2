@@ -262,3 +262,10 @@ Group's, under the MIT-style license in their headers.
 Dependency licenses and redistribution notices are in
 [third-party/NOTICES.md](https://github.com/hx-n/hxn-gpu-webgl2/blob/main/third-party/NOTICES.md). Retain the applicable
 notices when redistributing binaries.
+
+## Logging
+
+Diagnostics use core `hxn.Log` with target `hxn.gpu.webgl2`. The application
+can set `Log.level` and `Log.sink` to capture Haxe and native records together.
+Custom frame loops drain them with `hxn.Loop.sync()`; idle background work
+needs an application-driven `hxn.Log.flush()`.

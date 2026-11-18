@@ -1,11 +1,11 @@
 {
   "name": "hxn-gpu-webgl2",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "WebGL2 for Haxe in the browser, on hxcpp and Ash compiled to wasm: buffers, textures, samplers, programs, vertex arrays and framebuffers",
   "url": "https://github.com/hx-n/hxn-gpu-webgl2",
   "license": "Apache",
   "tags": ["webgl2", "webgl", "gpu", "haxe", "graphics", "glsl", "wasm", "emscripten", "browser", "hxcpp", "hashlink", "native", "cross"],
   "contributors": ["darmie", "rayzor"],
-  "releasenote": "Documents await under Ash from 0.1.21, which runs a library's watch handlers while the program's thread waits; with threads, await now works under Ash as under hxcpp. No code changes.",
-  "dependencies": { "hxn": "0.3.6" }
+  "releasenote": "Use hxn 0.3.9 shared logging with application-owned filtering and sinks; retain pinned dependency redistribution notices.",
+  "dependencies": { "hxn": "0.3.9" }
 }

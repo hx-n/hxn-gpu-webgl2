@@ -7,5 +7,6 @@ package hxn.gpu.webgl2;
 	a delivery does.
 **/
 class HxnGpuWebgl2Memory {
+	@:keep static final logging = hxn.Log.attach(level -> HxnGpuWebgl2Native.log_level(level), () -> HxnGpuWebgl2Native.log_take());
 	public static final meter = new hxn.Gc.Meter(() -> HxnGpuWebgl2Native.memory_held(), () -> HxnGpuWebgl2Native.memory_wanted());
 }

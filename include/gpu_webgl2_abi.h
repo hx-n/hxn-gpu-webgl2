@@ -85,6 +85,10 @@ hxn_status hxn_gpu_webgl2_future_wait(hxn_handle *self, int32_t milliseconds, in
 hxn_status hxn_gpu_webgl2_future_watch(hxn_handle *self, int32_t *out, hxn_buf *err);
 hxn_status hxn_gpu_webgl2_future_take_unit(hxn_handle *self, int32_t *out, hxn_buf *err);
 
+/* Configures capture and takes a bounded diagnostic batch. */
+void hxn_gpu_webgl2_log_level(int32_t level);
+hxn_status hxn_gpu_webgl2_log_take(hxn_buf *out, hxn_buf *err);
+
 /* The bytes the library's values hold that the host's collector cannot see,
  * and whether the library asked for a collection since the last call. */
 double hxn_gpu_webgl2_memory_held(void);

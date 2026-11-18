@@ -2,9 +2,10 @@
 package hxn.gpu.webgl2;
 
 /** A vertex array: attribute layouts and the buffers they read, and an element buffer. **/
+@:build(hxn.Log.bind())
 class VertexArray {
 	@:noCompletion public var hxnRaw:hxn.Handle;
-	@:noCompletion static final hxnMemory = HxnGpuWebgl2Memory.meter;
+	@:keep @:noCompletion static final hxnMemory = HxnGpuWebgl2Memory.meter;
 
 	/** An object for a value the library returned. **/
 	@:noCompletion public static function hxnAdopt(hxnRaw:hxn.Handle):VertexArray {

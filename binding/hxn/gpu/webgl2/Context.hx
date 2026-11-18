@@ -2,9 +2,10 @@
 package hxn.gpu.webgl2;
 
 /** A WebGL2 context on the web page's canvas. **/
+@:build(hxn.Log.bind())
 class Context {
 	@:noCompletion public var hxnRaw:hxn.Handle;
-	@:noCompletion static final hxnMemory = HxnGpuWebgl2Memory.meter;
+	@:keep @:noCompletion static final hxnMemory = HxnGpuWebgl2Memory.meter;
 
 	/** An object for a value the library returned. **/
 	@:noCompletion public static function hxnAdopt(hxnRaw:hxn.Handle):Context {

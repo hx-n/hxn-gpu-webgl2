@@ -31,6 +31,8 @@ package hxn.gpu.webgl2;
 @:noCompletion class HxnGpuWebgl2Native {
 	static function memory_held():Float;
 	static function memory_wanted():Bool;
+	static function log_level(level:Int):Void;
+	public static function log_take():Null<haxe.io.Bytes>;
 	static function context_create():hxn.Handle;
 	static function context_set_size(self:hxn.Handle, width:Int, height:Int):Void;
 	static function context_width(self:hxn.Handle):Int;

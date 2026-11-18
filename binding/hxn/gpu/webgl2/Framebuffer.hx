@@ -2,9 +2,10 @@
 package hxn.gpu.webgl2;
 
 /** A framebuffer with one attachment. **/
+@:build(hxn.Log.bind())
 class Framebuffer {
 	@:noCompletion public var hxnRaw:hxn.Handle;
-	@:noCompletion static final hxnMemory = HxnGpuWebgl2Memory.meter;
+	@:keep @:noCompletion static final hxnMemory = HxnGpuWebgl2Memory.meter;
 
 	/** An object for a value the library returned. **/
 	@:noCompletion public static function hxnAdopt(hxnRaw:hxn.Handle):Framebuffer {
