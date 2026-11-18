@@ -256,3 +256,9 @@ describes the library for coding agents. The haxelib includes it.
 
 Apache-2.0. `tools/wire/idl/webgl.idl` and `webgl2.idl` are The Khronos
 Group's, under the MIT-style license in their headers.
+
+## Third-party notices
+
+Dependency licenses and redistribution notices are in
+[third-party/NOTICES.md](https://github.com/hx-n/hxn-gpu-webgl2/blob/main/third-party/NOTICES.md). Retain the applicable
+notices when redistributing binaries.
