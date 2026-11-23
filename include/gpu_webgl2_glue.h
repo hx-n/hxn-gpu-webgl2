@@ -157,6 +157,11 @@ inline void context_clear(void *self, int bits, double r, double g, double b, do
 	hxn::check(hxn_gpu_webgl2_context_clear((hxn_handle *)self, bits, r, g, b, a, &err), err);
 }
 
+inline void context_set_blend(void *self, Array<unsigned char> blend) {
+	hxn_buf err = HXN_BUF_EMPTY;
+	hxn::check(hxn_gpu_webgl2_context_set_blend((hxn_handle *)self, hxn::slice(blend), &err), err);
+}
+
 inline void context_use_program(void *self, void *program) {
 	hxn_buf err = HXN_BUF_EMPTY;
 	hxn::check(hxn_gpu_webgl2_context_use_program((hxn_handle *)self, (hxn_handle *)program, &err), err);
