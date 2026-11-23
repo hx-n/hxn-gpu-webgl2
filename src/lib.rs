@@ -68,6 +68,10 @@ mod gl {
     pub const COLOR_BUFFER_BIT: u32 = 0x4000;
     pub const NEAREST: u32 = 0x2600;
     pub const SCISSOR_TEST: u32 = 0x0C11;
+    pub const COLOR: u32 = 0x1800;
+    pub const DEPTH: u32 = 0x1801;
+    pub const DEPTH_TEST: u32 = 0x0B71;
+    pub const NEVER: u32 = 0x0200;
     pub const FRAMEBUFFER_COMPLETE: u32 = 0x8CD5;
     pub const COLOR_ATTACHMENT0: u32 = 0x8CE0;
     pub const DEPTH_ATTACHMENT: u32 = 0x8D00;
@@ -468,7 +472,71 @@ impl Context {
                 "the framebuffer is incomplete: status 0x{status:X}"
             ));
         }
-        Ok(Framebuffer { name })
+        Ok(Framebuffer {
+            name,
+            colors: u32::from(color.format.attachment() == gl::COLOR_ATTACHMENT0),
+        })
+    }
+
+    /// Attaches `texture` to `framebuffer`: as its depth attachment when its format is a depth
+    /// format, and otherwise as its next color attachment, which drawing then writes as the
+    /// next output of the fragment shader.
+    pub fn attach(&self, framebuffer: &mut Framebuffer, texture: &Texture) -> Result<(), String> {
+        let attachment = match texture.format.attachment() {
+            gl::COLOR_ATTACHMENT0 => {
+                let next = gl::COLOR_ATTACHMENT0 + framebuffer.colors;
+                framebuffer.colors += 1;
+                next
+            }
+            depth => depth,
+        };
+        self.gl.bind_framebuffer(framebuffer.name.name);
+        self.gl
+            .framebuffer_texture_2d(attachment, texture.name.name);
+        let buffers: Vec<u32> = (0..framebuffer.colors)
+            .map(|i| gl::COLOR_ATTACHMENT0 + i)
+            .collect();
+        self.gl.draw_buffers(&buffers);
+        let status = self.gl.check_framebuffer_status();
+        self.gl.bind_framebuffer(0);
+        if status != gl::FRAMEBUFFER_COMPLETE {
+            return Err(format!(
+                "the framebuffer is incomplete: status 0x{status:X}"
+            ));
+        }
+        Ok(())
+    }
+
+    /// Clears color attachment `index` of the bound framebuffer to `r`, `g`, `b`, `a`, with
+    /// `clearBufferfv`.
+    pub fn clear_color_buffer(&self, index: i32, r: f64, g: f64, b: f64, a: f64) {
+        self.gl
+            .clear_buffer_color(index, [r as f32, g as f32, b as f32, a as f32]);
+    }
+
+    /// Clears the depth attachment of the bound framebuffer to `value`. Depth writes are on
+    /// after it.
+    pub fn clear_depth_buffer(&self, value: f64) {
+        self.gl.depth_mask(true);
+        self.gl.clear_buffer_depth(value as f32);
+    }
+
+    /// Sets the depth test of what is drawn next. With `enabled`, the test passes when
+    /// `compare` holds between a fragment's depth and the depth in the target, with the codes
+    /// from 0 `Never` to 7 `Always` that hxn-gpu's drivers share, and with `write` a fragment
+    /// that passes writes its depth. Without `enabled`, no depth is tested.
+    pub fn set_depth(&self, enabled: bool, compare: i32, write: bool) -> Result<(), String> {
+        if !(0..=7).contains(&compare) {
+            return Err(format!("a compare function is 0 to 7, not {compare}"));
+        }
+        if enabled {
+            self.gl.enable(gl::DEPTH_TEST);
+            self.gl.depth_func(gl::NEVER + compare as u32);
+            self.gl.depth_mask(write);
+        } else {
+            self.gl.disable(gl::DEPTH_TEST);
+        }
+        Ok(())
     }
 
     /// Renders into `framebuffer` from now on.
@@ -876,6 +944,8 @@ impl VertexArray {
 #[hxn::interface]
 pub struct Framebuffer {
     name: Name,
+    // The number of color attachments, which `drawBuffers` draws into.
+    colors: u32,
 }
 
 #[hxn::methods]

@@ -107,6 +107,11 @@ writes the color as it is.
   canvas with its rows reversed. Scissor with `context.scissorTest(true)` and
   `context.scissor(x, y, w, h)`; turn the test off before clearing or copying a
   whole target.
+- Several targets and depth: `context.attach(framebuffer, texture)` adds the next color
+  attachment, or the depth attachment for a `Depth32f` texture, and sets the draw buffers;
+  `context.clearColorBuffer(index, r, g, b, a)`, `context.clearDepthBuffer(value)` and
+  `context.setDepth(enabled, compare, write)` (codes 0 `Never` to 7 `Always`). One blend
+  state applies to every draw buffer.
 - Draws and copies run in the order they are made. Wait only to read on the
   CPU: `completed()` (an `hxn.Future`, settled once the GPU has finished every
   command issued before the call) or `finish()`. In a threaded build `await`

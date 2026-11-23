@@ -132,6 +132,26 @@ inline void *context_create_framebuffer(void *self, void *color) {
 	return out;
 }
 
+inline void context_attach(void *self, void *framebuffer, void *texture) {
+	hxn_buf err = HXN_BUF_EMPTY;
+	hxn::check(hxn_gpu_webgl2_context_attach((hxn_handle *)self, (hxn_handle *)framebuffer, (hxn_handle *)texture, &err), err);
+}
+
+inline void context_clear_color_buffer(void *self, int index, double r, double g, double b, double a) {
+	hxn_buf err = HXN_BUF_EMPTY;
+	hxn::check(hxn_gpu_webgl2_context_clear_color_buffer((hxn_handle *)self, index, r, g, b, a, &err), err);
+}
+
+inline void context_clear_depth_buffer(void *self, double value) {
+	hxn_buf err = HXN_BUF_EMPTY;
+	hxn::check(hxn_gpu_webgl2_context_clear_depth_buffer((hxn_handle *)self, value, &err), err);
+}
+
+inline void context_set_depth(void *self, bool enabled, int compare, bool write) {
+	hxn_buf err = HXN_BUF_EMPTY;
+	hxn::check(hxn_gpu_webgl2_context_set_depth((hxn_handle *)self, enabled ? 1 : 0, compare, write ? 1 : 0, &err), err);
+}
+
 inline void context_bind_framebuffer(void *self, void *framebuffer) {
 	hxn_buf err = HXN_BUF_EMPTY;
 	hxn::check(hxn_gpu_webgl2_context_bind_framebuffer((hxn_handle *)self, (hxn_handle *)framebuffer, &err), err);

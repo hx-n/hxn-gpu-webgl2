@@ -80,6 +80,37 @@ class Context {
 	public function createFramebuffer(color:Texture):Framebuffer
 		return Framebuffer.hxnAdopt(HxnGpuWebgl2Native.context_create_framebuffer(hxnRaw, color == null ? null : color.hxnRaw));
 
+	/**
+		Attaches `texture` to `framebuffer`: as its depth attachment when its format is a depth
+		format, and otherwise as its next color attachment, which drawing then writes as the
+		next output of the fragment shader.
+	**/
+	public function attach(framebuffer:Framebuffer, texture:Texture):Void
+		HxnGpuWebgl2Native.context_attach(hxnRaw, framebuffer == null ? null : framebuffer.hxnRaw, texture == null ? null : texture.hxnRaw);
+
+	/**
+		Clears color attachment `index` of the bound framebuffer to `r`, `g`, `b`, `a`, with
+		`clearBufferfv`.
+	**/
+	public function clearColorBuffer(index:Int, r:Float, g:Float, b:Float, a:Float):Void
+		HxnGpuWebgl2Native.context_clear_color_buffer(hxnRaw, index, r, g, b, a);
+
+	/**
+		Clears the depth attachment of the bound framebuffer to `value`. Depth writes are on
+		after it.
+	**/
+	public function clearDepthBuffer(value:Float):Void
+		HxnGpuWebgl2Native.context_clear_depth_buffer(hxnRaw, value);
+
+	/**
+		Sets the depth test of what is drawn next. With `enabled`, the test passes when
+		`compare` holds between a fragment's depth and the depth in the target, with the codes
+		from 0 `Never` to 7 `Always` that hxn-gpu's drivers share, and with `write` a fragment
+		that passes writes its depth. Without `enabled`, no depth is tested.
+	**/
+	public function setDepth(enabled:Bool, compare:Int, write:Bool):Void
+		HxnGpuWebgl2Native.context_set_depth(hxnRaw, enabled, compare, write);
+
 	/** Renders into `framebuffer` from now on. **/
 	public function bindFramebuffer(framebuffer:Framebuffer):Void
 		HxnGpuWebgl2Native.context_bind_framebuffer(hxnRaw, framebuffer == null ? null : framebuffer.hxnRaw);

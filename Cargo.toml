@@ -1,6 +1,6 @@
 [package]
 name = "hxn-gpu-webgl2"
-version = "0.3.4"
+version = "0.3.5"
 edition = "2024"
 description = "WebGL2 for Haxe in the browser, on hxcpp and Ash compiled to wasm: buffers, textures, samplers, programs, vertex arrays and framebuffers"
 repository = "https://github.com/hx-n/hxn-gpu-webgl2"
@@ -14,7 +14,7 @@ name = "hxn_gpu_webgl2"
 library = "gpu_webgl2"
 haxelib = "hxn-gpu-webgl2"
 contributors = ["darmie", "rayzor"]
-releasenote = "Blend what a pipeline draws, and add the scissor test and a flipped copy into the canvas."
+releasenote = "Draw into several color targets in one pass, and test and write depth."
 haxe = "examples/check"
 haxe-flags = ["-lib", "hxnsl"]
 # Registers hxnsl's GLSL target for hxn.gpu.webgl2.Shader, from sources/.

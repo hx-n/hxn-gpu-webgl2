@@ -24,6 +24,10 @@ hxn_status hxn_gpu_webgl2_context_create_sampler(hxn_handle *self, int32_t min, 
 hxn_status hxn_gpu_webgl2_context_create_program(hxn_handle *self, hxn_slice vertex, hxn_slice fragment, hxn_handle **out, hxn_buf *err);
 hxn_status hxn_gpu_webgl2_context_create_vertex_array(hxn_handle *self, hxn_handle **out, hxn_buf *err);
 hxn_status hxn_gpu_webgl2_context_create_framebuffer(hxn_handle *self, hxn_handle *color, hxn_handle **out, hxn_buf *err);
+hxn_status hxn_gpu_webgl2_context_attach(hxn_handle *self, hxn_handle *framebuffer, hxn_handle *texture, hxn_buf *err);
+hxn_status hxn_gpu_webgl2_context_clear_color_buffer(hxn_handle *self, int32_t index, double r, double g, double b, double a, hxn_buf *err);
+hxn_status hxn_gpu_webgl2_context_clear_depth_buffer(hxn_handle *self, double value, hxn_buf *err);
+hxn_status hxn_gpu_webgl2_context_set_depth(hxn_handle *self, int32_t enabled, int32_t compare, int32_t write, hxn_buf *err);
 hxn_status hxn_gpu_webgl2_context_bind_framebuffer(hxn_handle *self, hxn_handle *framebuffer, hxn_buf *err);
 hxn_status hxn_gpu_webgl2_context_bind_default_framebuffer(hxn_handle *self, hxn_buf *err);
 hxn_status hxn_gpu_webgl2_context_viewport(hxn_handle *self, int32_t x, int32_t y, int32_t width, int32_t height, hxn_buf *err);

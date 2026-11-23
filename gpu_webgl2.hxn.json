@@ -200,6 +200,42 @@
           "blocking": false
         },
         {
+          "name": "attach",
+          "docs": "Attaches `texture` to `framebuffer`: as its depth attachment when its format is a depth\nformat, and otherwise as its next color attachment, which drawing then writes as the\nnext output of the fragment shader.",
+          "kind": "method",
+          "params": [{ "name": "framebuffer", "type": "Framebuffer", "borrow": "exclusive" }, { "name": "texture", "type": "Texture" }],
+          "returns": "void",
+          "fallible": true,
+          "blocking": false
+        },
+        {
+          "name": "clear_color_buffer",
+          "docs": "Clears color attachment `index` of the bound framebuffer to `r`, `g`, `b`, `a`, with\n`clearBufferfv`.",
+          "kind": "method",
+          "params": [{ "name": "index", "type": "i32" }, { "name": "r", "type": "f64" }, { "name": "g", "type": "f64" }, { "name": "b", "type": "f64" }, { "name": "a", "type": "f64" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "clear_depth_buffer",
+          "docs": "Clears the depth attachment of the bound framebuffer to `value`. Depth writes are on\nafter it.",
+          "kind": "method",
+          "params": [{ "name": "value", "type": "f64" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "set_depth",
+          "docs": "Sets the depth test of what is drawn next. With `enabled`, the test passes when\n`compare` holds between a fragment's depth and the depth in the target, with the codes\nfrom 0 `Never` to 7 `Always` that hxn-gpu's drivers share, and with `write` a fragment\nthat passes writes its depth. Without `enabled`, no depth is tested.",
+          "kind": "method",
+          "params": [{ "name": "enabled", "type": "bool" }, { "name": "compare", "type": "i32" }, { "name": "write", "type": "bool" }],
+          "returns": "void",
+          "fallible": true,
+          "blocking": false
+        },
+        {
           "name": "bind_framebuffer",
           "docs": "Renders into `framebuffer` from now on.",
           "kind": "method",

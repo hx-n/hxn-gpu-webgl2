@@ -728,6 +728,44 @@ impl Gl {
             .web_gl2rendering_context_bind_framebuffer(GL, &gl::FRAMEBUFFER, &None);
     }
 
+    pub fn draw_buffers(&self, buffers: &[u32]) {
+        state()
+            .commands
+            .web_gl2rendering_context_draw_buffers(GL, &buffers.to_vec());
+    }
+
+    pub fn clear_buffer_color(&self, index: i32, rgba: [f32; 4]) {
+        state().commands.web_gl2rendering_context_clear_bufferfv(
+            GL,
+            &gl::COLOR,
+            &index,
+            &wire::Float32List::SequenceOfFloat(rgba.to_vec()),
+            &None,
+        );
+    }
+
+    pub fn clear_buffer_depth(&self, value: f32) {
+        state().commands.web_gl2rendering_context_clear_bufferfv(
+            GL,
+            &gl::DEPTH,
+            &0,
+            &wire::Float32List::SequenceOfFloat(vec![value]),
+            &None,
+        );
+    }
+
+    pub fn depth_func(&self, func: u32) {
+        state()
+            .commands
+            .web_gl2rendering_context_depth_func(GL, &func);
+    }
+
+    pub fn depth_mask(&self, write: bool) {
+        state()
+            .commands
+            .web_gl2rendering_context_depth_mask(GL, &write);
+    }
+
     pub fn framebuffer_texture_2d(&self, attachment: u32, texture: u32) {
         state()
             .commands

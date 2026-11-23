@@ -160,6 +160,10 @@ unsafe extern "C" {
     fn glCheckFramebufferStatus(target: u32) -> u32;
     fn glViewport(x: c_int, y: c_int, width: c_int, height: c_int);
     fn glScissor(x: c_int, y: c_int, width: c_int, height: c_int);
+    fn glDrawBuffers(count: c_int, buffers: *const u32);
+    fn glClearBufferfv(buffer: u32, drawbuffer: c_int, values: *const f32);
+    fn glDepthFunc(func: u32);
+    fn glDepthMask(flag: u8);
     #[allow(clippy::too_many_arguments)]
     fn glBlitFramebuffer(
         src_x0: c_int,
@@ -621,6 +625,26 @@ impl Gl {
             );
             glBindFramebuffer(gl::FRAMEBUFFER, 0);
         }
+    }
+
+    pub fn draw_buffers(&self, buffers: &[u32]) {
+        unsafe { glDrawBuffers(buffers.len() as c_int, buffers.as_ptr()) };
+    }
+
+    pub fn clear_buffer_color(&self, index: i32, rgba: [f32; 4]) {
+        unsafe { glClearBufferfv(gl::COLOR, index, rgba.as_ptr()) };
+    }
+
+    pub fn clear_buffer_depth(&self, value: f32) {
+        unsafe { glClearBufferfv(gl::DEPTH, 0, &value) };
+    }
+
+    pub fn depth_func(&self, func: u32) {
+        unsafe { glDepthFunc(func) };
+    }
+
+    pub fn depth_mask(&self, write: bool) {
+        unsafe { glDepthMask(u8::from(write)) };
     }
 
     pub fn framebuffer_texture_2d(&self, attachment: u32, texture: u32) {
