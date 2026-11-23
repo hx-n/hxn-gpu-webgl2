@@ -36,6 +36,23 @@ hxn::package!("hxn.gpu.webgl2");
 /// The OpenGL ES values this library passes, which WebGL2 shares.
 #[allow(dead_code)]
 mod gl {
+    pub const BLEND: u32 = 0x0BE2;
+    pub const ZERO: u32 = 0;
+    pub const ONE: u32 = 1;
+    pub const SRC_COLOR: u32 = 0x0300;
+    pub const ONE_MINUS_SRC_COLOR: u32 = 0x0301;
+    pub const SRC_ALPHA: u32 = 0x0302;
+    pub const ONE_MINUS_SRC_ALPHA: u32 = 0x0303;
+    pub const DST_ALPHA: u32 = 0x0304;
+    pub const ONE_MINUS_DST_ALPHA: u32 = 0x0305;
+    pub const DST_COLOR: u32 = 0x0306;
+    pub const ONE_MINUS_DST_COLOR: u32 = 0x0307;
+    pub const SRC_ALPHA_SATURATE: u32 = 0x0308;
+    pub const FUNC_ADD: u32 = 0x8006;
+    pub const MIN: u32 = 0x8007;
+    pub const MAX: u32 = 0x8008;
+    pub const FUNC_SUBTRACT: u32 = 0x800A;
+    pub const FUNC_REVERSE_SUBTRACT: u32 = 0x800B;
     pub const VENDOR: u32 = 0x1F00;
     pub const RENDERER: u32 = 0x1F01;
     pub const VERSION: u32 = 0x1F02;
@@ -81,6 +98,20 @@ fn i32_of(value: i64, what: &str) -> Result<i32, String> {
 }
 
 /// A texture's internal format, OpenGL ES's values.
+/// How what is drawn blends into the target. The factors are hxn-gpu's shared codes, from 0
+/// `Zero` to 10 `SrcAlphaSaturated`, and the operations from 0 `Add` to 4 `Max`. With
+/// `enabled` false, drawing writes its color as it is.
+#[hxn::data]
+pub struct Blend {
+    pub enabled: bool,
+    pub color_operation: i32,
+    pub color_source: i32,
+    pub color_destination: i32,
+    pub alpha_operation: i32,
+    pub alpha_source: i32,
+    pub alpha_destination: i32,
+}
+
 #[hxn::data]
 #[derive(Clone, Copy, PartialEq)]
 pub enum TextureFormat {
@@ -458,6 +489,60 @@ impl Context {
     pub fn clear(&self, bits: i32, r: f64, g: f64, b: f64, a: f64) {
         self.gl
             .clear(bits as u32, [r as f32, g as f32, b as f32, a as f32]);
+    }
+
+    /// Sets how what is drawn next blends into the target: `enable(BLEND)` with
+    /// `blendEquationSeparate` and `blendFuncSeparate`, or `disable(BLEND)`.
+    pub fn set_blend(&self, blend: Blend) -> Result<(), String> {
+        if !blend.enabled {
+            self.gl.disable(gl::BLEND);
+            return Ok(());
+        }
+        let factor = |code: i32, what: &str| -> Result<u32, String> {
+            const FACTORS: [u32; 11] = [
+                gl::ZERO,
+                gl::ONE,
+                gl::SRC_COLOR,
+                gl::ONE_MINUS_SRC_COLOR,
+                gl::SRC_ALPHA,
+                gl::ONE_MINUS_SRC_ALPHA,
+                gl::DST_COLOR,
+                gl::ONE_MINUS_DST_COLOR,
+                gl::DST_ALPHA,
+                gl::ONE_MINUS_DST_ALPHA,
+                gl::SRC_ALPHA_SATURATE,
+            ];
+            usize::try_from(code)
+                .ok()
+                .and_then(|i| FACTORS.get(i).copied())
+                .ok_or_else(|| format!("{what} is {code}, and a blend factor is 0 to 10"))
+        };
+        let equation = |code: i32, what: &str| -> Result<u32, String> {
+            const EQUATIONS: [u32; 5] = [
+                gl::FUNC_ADD,
+                gl::FUNC_SUBTRACT,
+                gl::FUNC_REVERSE_SUBTRACT,
+                gl::MIN,
+                gl::MAX,
+            ];
+            usize::try_from(code)
+                .ok()
+                .and_then(|i| EQUATIONS.get(i).copied())
+                .ok_or_else(|| format!("{what} is {code}, and a blend operation is 0 to 4"))
+        };
+        let color = equation(blend.color_operation, "the color operation")?;
+        let alpha = equation(blend.alpha_operation, "the alpha operation")?;
+        let sources = [
+            factor(blend.color_source, "the color source")?,
+            factor(blend.color_destination, "the color destination")?,
+            factor(blend.alpha_source, "the alpha source")?,
+            factor(blend.alpha_destination, "the alpha destination")?,
+        ];
+        self.gl.enable(gl::BLEND);
+        self.gl.blend_equation_separate(color, alpha);
+        self.gl
+            .blend_func_separate(sources[0], sources[1], sources[2], sources[3]);
+        Ok(())
     }
 
     pub fn use_program(&self, program: &Program) {

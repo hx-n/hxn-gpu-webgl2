@@ -34,6 +34,7 @@ class Main {
 		// and the other passes run from there.
 		render(context, () -> {
 			textured(context);
+			blended(context);
 			buffer(context);
 			// With threads the canvas is the browser agent's once claimed; without, Emscripten's at once.
 			context.claimCanvas().then(_ -> {
@@ -47,22 +48,24 @@ class Main {
 		Sys.println("render: submitted");
 	}
 
-	/** A 4x4 Rgba8 texture and a framebuffer rendering into it, bound and cleared. **/
-	static function target(context:Context):{texture:Texture, framebuffer:Framebuffer} {
+	/** A 4x4 Rgba8 texture and a framebuffer rendering into it, bound and cleared to `clear`. **/
+	static function target(context:Context, ?clear:Array<Float>):{texture:Texture, framebuffer:Framebuffer} {
 		var texture = context.createTexture(4, 4, TextureFormat.Rgba8);
 		var framebuffer = context.createFramebuffer(texture);
 		context.bindFramebuffer(framebuffer);
 		context.viewport(0, 0, 4, 4);
-		context.clear(ClearBits.Color, 0, 0, 0, 0);
+		if (clear == null)
+			clear = [0, 0, 0, 0];
+		context.clear(ClearBits.Color, clear[0], clear[1], clear[2], clear[3]);
 		return {texture: texture, framebuffer: framebuffer};
 	}
 
-	/** Reads the bound framebuffer's `size` square, and checks every pixel is `expected`. **/
-	static function readTarget(context:Context, size:Int, expected:Array<Int>, label:String) {
+	/** Reads the bound framebuffer's `size` square, and checks every pixel is `expected`, within `tolerance`. **/
+	static function readTarget(context:Context, size:Int, expected:Array<Int>, label:String, tolerance = 0) {
 		var pixels = context.readPixels(0, 0, size, size);
 		for (i in 0...size * size)
 			for (c in 0...4)
-				check(pixels.get(i * 4 + c) == expected[c], '$label: pixel $i channel $c is ${pixels.get(i * 4 + c)}, not ${expected[c]}');
+				check(Math.abs(pixels.get(i * 4 + c) - expected[c]) <= tolerance, '$label: pixel $i channel $c is ${pixels.get(i * 4 + c)}, not ${expected[c]}');
 	}
 
 	static function quad(context:Context, values:Array<Float>):Buffer {
@@ -99,6 +102,54 @@ class Main {
 			Sys.println('render failed: ${e.message}');
 			hxn.Loop.exit(1);
 		});
+	}
+
+	// Straight alpha: color = source * source alpha + destination * (1 - source alpha),
+	// and alpha = source + destination * (1 - source alpha). The shared factor codes 4
+	// (SrcAlpha), 5 (OneMinusSrcAlpha) and 1 (One), and the operation 0 (Add).
+	static final ALPHA:Blend = {
+		enabled: true,
+		colorOperation: 0,
+		colorSource: 4,
+		colorDestination: 5,
+		alphaOperation: 0,
+		alphaSource: 1,
+		alphaDestination: 5
+	};
+
+	static final REPLACE:Blend = {
+		enabled: false,
+		colorOperation: 0,
+		colorSource: 1,
+		colorDestination: 0,
+		alphaOperation: 0,
+		alphaSource: 1,
+		alphaDestination: 0
+	};
+
+	// A half-transparent red quad over a blue target: half red, half blue, opaque.
+	static function blended(context:Context) {
+		var bindings = new Bindings(Tinted.GLSL_BINDINGS);
+		var program = hxn.gpu.webgl2.Shaders.program(context, Tinted.GLSL_VERTEX, Tinted.GLSL_FRAGMENT, bindings);
+		var positions = quad(context, [-1, -1, 1, -1, -1, 1, 1, 1]);
+		var vertices = context.createVertexArray();
+		vertices.attribute(Tinted.INPUT_position, positions, 2, ComponentType.Float, false, 8, 0);
+		var params = Bytes.alloc(Tinted.PARAMS_SIZE);
+		var tint = [1.0, 0.0, 0.0, 0.5];
+		for (i in 0...4)
+			params.setFloat(Tinted.PARAMS_tint + i * 4, tint[i]);
+		var uniforms = context.createBufferWith(BufferTarget.Uniform, params, Usage.StaticDraw);
+
+		var t = target(context, [0, 0, 1, 1]);
+		context.setBlend(ALPHA);
+		context.useProgram(program);
+		context.bindVertexArray(vertices);
+		context.bindUniformBuffer(bindings.uniformBlock(Tinted.PARAMS_GROUP, Tinted.PARAMS_BINDING), uniforms);
+		context.drawArrays(Primitive.TriangleStrip, 0, 4, 1);
+		context.setBlend(REPLACE);
+		readTarget(context, 4, [128, 0, 128, 255], "blend", 1);
+		Sys.println("blend: 4x4 pixels of about 128, 0, 128, 255");
+		closeAll([t.framebuffer, t.texture, uniforms, vertices, positions, program]);
 	}
 
 	static function textured(context:Context) {

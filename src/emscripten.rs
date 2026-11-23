@@ -118,6 +118,15 @@ unsafe extern "C" {
     fn glGetProgramiv(program: u32, name: u32, value: *mut c_int);
     fn glGetProgramInfoLog(program: u32, size: c_int, length: *mut c_int, log: *mut c_char);
     fn glUseProgram(program: u32);
+    fn glEnable(cap: u32);
+    fn glDisable(cap: u32);
+    fn glBlendEquationSeparate(color: u32, alpha: u32);
+    fn glBlendFuncSeparate(
+        source_color: u32,
+        destination_color: u32,
+        source_alpha: u32,
+        destination_alpha: u32,
+    );
     fn glGetUniformBlockIndex(program: u32, name: *const c_char) -> u32;
     fn glUniformBlockBinding(program: u32, index: u32, binding: u32);
     fn glGetUniformLocation(program: u32, name: *const c_char) -> c_int;
@@ -474,6 +483,35 @@ impl Gl {
 
     pub fn use_program(&self, program: u32) {
         unsafe { glUseProgram(program) };
+    }
+
+    pub fn enable(&self, cap: u32) {
+        unsafe { glEnable(cap) };
+    }
+
+    pub fn disable(&self, cap: u32) {
+        unsafe { glDisable(cap) };
+    }
+
+    pub fn blend_equation_separate(&self, color: u32, alpha: u32) {
+        unsafe { glBlendEquationSeparate(color, alpha) };
+    }
+
+    pub fn blend_func_separate(
+        &self,
+        source_color: u32,
+        destination_color: u32,
+        source_alpha: u32,
+        destination_alpha: u32,
+    ) {
+        unsafe {
+            glBlendFuncSeparate(
+                source_color,
+                destination_color,
+                source_alpha,
+                destination_alpha,
+            )
+        };
     }
 
     pub fn uniform_block_index(&self, program: u32, name: &str) -> u32 {

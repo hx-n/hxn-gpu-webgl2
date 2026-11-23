@@ -53,6 +53,7 @@ package hxn.gpu.webgl2;
 	static function context_viewport(self:hxn.Handle, x:Int, y:Int, width:Int, height:Int):Void;
 	static function context_scissor(self:hxn.Handle, x:Int, y:Int, width:Int, height:Int):Void;
 	static function context_clear(self:hxn.Handle, bits:Int, r:Float, g:Float, b:Float, a:Float):Void;
+	static function context_set_blend(self:hxn.Handle, blend:haxe.io.Bytes):Void;
 	static function context_use_program(self:hxn.Handle, program:hxn.Handle):Void;
 	static function context_bind_vertex_array(self:hxn.Handle, vertexArray:hxn.Handle):Void;
 	static function context_bind_uniform_buffer(self:hxn.Handle, index:Int, buffer:hxn.Handle):Void;

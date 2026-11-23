@@ -44,6 +44,21 @@
       "variants": [{ "name": "Depth", "value": 256 }, { "name": "Stencil", "value": 1024 }, { "name": "Color", "value": 16384 }]
     }
   ],
+  "records": [
+    {
+      "name": "Blend",
+      "docs": "A texture's internal format, OpenGL ES's values.\nHow what is drawn blends into the target. The factors are hxn-gpu's shared codes, from 0\n`Zero` to 10 `SrcAlphaSaturated`, and the operations from 0 `Add` to 4 `Max`. With\n`enabled` false, drawing writes its color as it is.",
+      "fields": [
+        { "name": "enabled", "type": "bool" },
+        { "name": "color_operation", "type": "i32" },
+        { "name": "color_source", "type": "i32" },
+        { "name": "color_destination", "type": "i32" },
+        { "name": "alpha_operation", "type": "i32" },
+        { "name": "alpha_source", "type": "i32" },
+        { "name": "alpha_destination", "type": "i32" }
+      ]
+    }
+  ],
   "interfaces": [
     {
       "name": "Context",
@@ -225,6 +240,15 @@
           "params": [{ "name": "bits", "type": "i32" }, { "name": "r", "type": "f64" }, { "name": "g", "type": "f64" }, { "name": "b", "type": "f64" }, { "name": "a", "type": "f64" }],
           "returns": "void",
           "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "set_blend",
+          "docs": "Sets how what is drawn next blends into the target: `enable(BLEND)` with\n`blendEquationSeparate` and `blendFuncSeparate`, or `disable(BLEND)`.",
+          "kind": "method",
+          "params": [{ "name": "blend", "type": "Blend" }],
+          "returns": "void",
+          "fallible": true,
           "blocking": false
         },
         {

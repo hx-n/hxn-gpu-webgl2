@@ -568,6 +568,38 @@ impl Gl {
             .web_gl2rendering_context_use_program(GL, &some(program));
     }
 
+    pub fn enable(&self, cap: u32) {
+        state().commands.web_gl_rendering_context_enable(GL, &cap);
+    }
+
+    pub fn disable(&self, cap: u32) {
+        state().commands.web_gl_rendering_context_disable(GL, &cap);
+    }
+
+    pub fn blend_equation_separate(&self, color: u32, alpha: u32) {
+        state()
+            .commands
+            .web_gl_rendering_context_blend_equation_separate(GL, &color, &alpha);
+    }
+
+    pub fn blend_func_separate(
+        &self,
+        source_color: u32,
+        destination_color: u32,
+        source_alpha: u32,
+        destination_alpha: u32,
+    ) {
+        state()
+            .commands
+            .web_gl_rendering_context_blend_func_separate(
+                GL,
+                &source_color,
+                &destination_color,
+                &source_alpha,
+                &destination_alpha,
+            );
+    }
+
     pub fn uniform_block_index(&self, program: u32, name: &str) -> u32 {
         state()
             .ask(16, |c, reply| {
