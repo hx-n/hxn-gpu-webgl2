@@ -152,6 +152,16 @@ inline void context_scissor(void *self, int x, int y, int width, int height) {
 	hxn::check(hxn_gpu_webgl2_context_scissor((hxn_handle *)self, x, y, width, height, &err), err);
 }
 
+inline void context_scissor_test(void *self, bool enabled) {
+	hxn_buf err = HXN_BUF_EMPTY;
+	hxn::check(hxn_gpu_webgl2_context_scissor_test((hxn_handle *)self, enabled ? 1 : 0, &err), err);
+}
+
+inline void context_blit_flipped(void *self, void *framebuffer, int width, int height) {
+	hxn_buf err = HXN_BUF_EMPTY;
+	hxn::check(hxn_gpu_webgl2_context_blit_flipped((hxn_handle *)self, (hxn_handle *)framebuffer, width, height, &err), err);
+}
+
 inline void context_clear(void *self, int bits, double r, double g, double b, double a) {
 	hxn_buf err = HXN_BUF_EMPTY;
 	hxn::check(hxn_gpu_webgl2_context_clear((hxn_handle *)self, bits, r, g, b, a, &err), err);

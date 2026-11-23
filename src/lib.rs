@@ -63,6 +63,11 @@ mod gl {
     pub const TEXTURE_WRAP_S: u32 = 0x2802;
     pub const TEXTURE_WRAP_T: u32 = 0x2803;
     pub const FRAMEBUFFER: u32 = 0x8D40;
+    pub const READ_FRAMEBUFFER: u32 = 0x8CA8;
+    pub const DRAW_FRAMEBUFFER: u32 = 0x8CA9;
+    pub const COLOR_BUFFER_BIT: u32 = 0x4000;
+    pub const NEAREST: u32 = 0x2600;
+    pub const SCISSOR_TEST: u32 = 0x0C11;
     pub const FRAMEBUFFER_COMPLETE: u32 = 0x8CD5;
     pub const COLOR_ATTACHMENT0: u32 = 0x8CE0;
     pub const DEPTH_ATTACHMENT: u32 = 0x8D00;
@@ -482,6 +487,22 @@ impl Context {
 
     pub fn scissor(&self, x: i32, y: i32, width: i32, height: i32) {
         self.gl.scissor(x, y, width, height);
+    }
+
+    /// Turns the scissor test on or off: `glEnable` or `glDisable` of `GL_SCISSOR_TEST`.
+    /// While it is on, drawing, clearing and copies stay inside the `scissor` rectangle.
+    pub fn scissor_test(&self, enabled: bool) {
+        if enabled {
+            self.gl.enable(gl::SCISSOR_TEST);
+        } else {
+            self.gl.disable(gl::SCISSOR_TEST);
+        }
+    }
+
+    /// Copies the `width` by `height` color of `framebuffer` into the canvas with its rows
+    /// reversed, then renders into the canvas. The scissor test must be off.
+    pub fn blit_flipped(&self, framebuffer: &Framebuffer, width: i32, height: i32) {
+        self.gl.blit_flipped(framebuffer.name.name, width, height);
     }
 
     /// Clears the bound framebuffer's color, depth or stencil: `bits` are `ClearBits` or-ed

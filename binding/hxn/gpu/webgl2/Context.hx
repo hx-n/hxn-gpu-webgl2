@@ -95,6 +95,20 @@ class Context {
 		HxnGpuWebgl2Native.context_scissor(hxnRaw, x, y, width, height);
 
 	/**
+		Turns the scissor test on or off: `glEnable` or `glDisable` of `GL_SCISSOR_TEST`.
+		While it is on, drawing, clearing and copies stay inside the `scissor` rectangle.
+	**/
+	public function scissorTest(enabled:Bool):Void
+		HxnGpuWebgl2Native.context_scissor_test(hxnRaw, enabled);
+
+	/**
+		Copies the `width` by `height` color of `framebuffer` into the canvas with its rows
+		reversed, then renders into the canvas. The scissor test must be off.
+	**/
+	public function blitFlipped(framebuffer:Framebuffer, width:Int, height:Int):Void
+		HxnGpuWebgl2Native.context_blit_flipped(hxnRaw, framebuffer == null ? null : framebuffer.hxnRaw, width, height);
+
+	/**
 		Clears the bound framebuffer's color, depth or stencil: `bits` are `ClearBits` or-ed
 		together.
 	**/

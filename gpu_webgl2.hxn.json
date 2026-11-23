@@ -234,6 +234,24 @@
           "blocking": false
         },
         {
+          "name": "scissor_test",
+          "docs": "Turns the scissor test on or off: `glEnable` or `glDisable` of `GL_SCISSOR_TEST`.\nWhile it is on, drawing, clearing and copies stay inside the `scissor` rectangle.",
+          "kind": "method",
+          "params": [{ "name": "enabled", "type": "bool" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
+          "name": "blit_flipped",
+          "docs": "Copies the `width` by `height` color of `framebuffer` into the canvas with its rows\nreversed, then renders into the canvas. The scissor test must be off.",
+          "kind": "method",
+          "params": [{ "name": "framebuffer", "type": "Framebuffer" }, { "name": "width", "type": "i32" }, { "name": "height", "type": "i32" }],
+          "returns": "void",
+          "fallible": false,
+          "blocking": false
+        },
+        {
           "name": "clear",
           "docs": "Clears the bound framebuffer's color, depth or stencil: `bits` are `ClearBits` or-ed\ntogether.",
           "kind": "method",

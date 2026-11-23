@@ -102,6 +102,11 @@ writes the color as it is.
   which fails when another browser agent holds it. Each frame, draw into the
   default framebuffer and call `context.present()`. Call `readPixels` on the
   canvas before `present` and before returning to the browser.
+- hxnsl's GLSL flips clip space, so a frame drawn into a texture shows upright
+  through `context.blitFlipped(framebuffer, w, h)`, which copies it into the
+  canvas with its rows reversed. Scissor with `context.scissorTest(true)` and
+  `context.scissor(x, y, w, h)`; turn the test off before clearing or copying a
+  whole target.
 - Draws and copies run in the order they are made. Wait only to read on the
   CPU: `completed()` (an `hxn.Future`, settled once the GPU has finished every
   command issued before the call) or `finish()`. In a threaded build `await`

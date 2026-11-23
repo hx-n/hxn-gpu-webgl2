@@ -702,6 +702,32 @@ impl Gl {
         );
     }
 
+    pub fn blit_flipped(&self, read: u32, width: i32, height: i32) {
+        let mut s = state();
+        s.commands.web_gl2rendering_context_bind_framebuffer(
+            GL,
+            &gl::READ_FRAMEBUFFER,
+            &some(read),
+        );
+        s.commands
+            .web_gl2rendering_context_bind_framebuffer(GL, &gl::DRAW_FRAMEBUFFER, &None);
+        s.commands.web_gl2rendering_context_blit_framebuffer(
+            GL,
+            &0,
+            &0,
+            &width,
+            &height,
+            &0,
+            &height,
+            &width,
+            &0,
+            &gl::COLOR_BUFFER_BIT,
+            &gl::NEAREST,
+        );
+        s.commands
+            .web_gl2rendering_context_bind_framebuffer(GL, &gl::FRAMEBUFFER, &None);
+    }
+
     pub fn framebuffer_texture_2d(&self, attachment: u32, texture: u32) {
         state()
             .commands

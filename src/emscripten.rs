@@ -160,6 +160,19 @@ unsafe extern "C" {
     fn glCheckFramebufferStatus(target: u32) -> u32;
     fn glViewport(x: c_int, y: c_int, width: c_int, height: c_int);
     fn glScissor(x: c_int, y: c_int, width: c_int, height: c_int);
+    #[allow(clippy::too_many_arguments)]
+    fn glBlitFramebuffer(
+        src_x0: c_int,
+        src_y0: c_int,
+        src_x1: c_int,
+        src_y1: c_int,
+        dst_x0: c_int,
+        dst_y0: c_int,
+        dst_x1: c_int,
+        dst_y1: c_int,
+        mask: u32,
+        filter: u32,
+    );
     fn glClearColor(r: f32, g: f32, b: f32, a: f32);
     fn glClear(bits: u32);
     fn glDrawArraysInstanced(mode: u32, first: c_int, count: c_int, instances: c_int);
@@ -588,6 +601,26 @@ impl Gl {
 
     pub fn bind_framebuffer(&self, name: u32) {
         unsafe { glBindFramebuffer(gl::FRAMEBUFFER, name) };
+    }
+
+    pub fn blit_flipped(&self, read: u32, width: i32, height: i32) {
+        unsafe {
+            glBindFramebuffer(gl::READ_FRAMEBUFFER, read);
+            glBindFramebuffer(gl::DRAW_FRAMEBUFFER, 0);
+            glBlitFramebuffer(
+                0,
+                0,
+                width,
+                height,
+                0,
+                height,
+                width,
+                0,
+                gl::COLOR_BUFFER_BIT,
+                gl::NEAREST,
+            );
+            glBindFramebuffer(gl::FRAMEBUFFER, 0);
+        }
     }
 
     pub fn framebuffer_texture_2d(&self, attachment: u32, texture: u32) {

@@ -52,6 +52,8 @@ package hxn.gpu.webgl2;
 	static function context_bind_default_framebuffer(self:hxn.Handle):Void;
 	static function context_viewport(self:hxn.Handle, x:Int, y:Int, width:Int, height:Int):Void;
 	static function context_scissor(self:hxn.Handle, x:Int, y:Int, width:Int, height:Int):Void;
+	static function context_scissor_test(self:hxn.Handle, enabled:Bool):Void;
+	static function context_blit_flipped(self:hxn.Handle, framebuffer:hxn.Handle, width:Int, height:Int):Void;
 	static function context_clear(self:hxn.Handle, bits:Int, r:Float, g:Float, b:Float, a:Float):Void;
 	static function context_set_blend(self:hxn.Handle, blend:haxe.io.Bytes):Void;
 	static function context_use_program(self:hxn.Handle, program:hxn.Handle):Void;
