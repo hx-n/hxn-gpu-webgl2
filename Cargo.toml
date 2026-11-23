@@ -14,7 +14,7 @@ name = "hxn_gpu_webgl2"
 library = "gpu_webgl2"
 haxelib = "hxn-gpu-webgl2"
 contributors = ["darmie", "rayzor"]
-releasenote = "Blend what a render pipeline draws into its target."
+releasenote = "Blend what a pipeline draws, and add the scissor test and a flipped copy into the canvas."
 haxe = "examples/check"
 haxe-flags = ["-lib", "hxnsl"]
 # Registers hxnsl's GLSL target for hxn.gpu.webgl2.Shader, from sources/.

@@ -6,6 +6,6 @@
   "license": "Apache",
   "tags": ["webgl2", "webgl", "gpu", "haxe", "graphics", "glsl", "wasm", "emscripten", "browser", "hxcpp", "hashlink", "native", "cross"],
   "contributors": ["darmie", "rayzor"],
-  "releasenote": "Blend what a render pipeline draws into its target.",
+  "releasenote": "Blend what a pipeline draws, and add the scissor test and a flipped copy into the canvas.",
   "dependencies": { "hxn": "0.3.9" }
 }
