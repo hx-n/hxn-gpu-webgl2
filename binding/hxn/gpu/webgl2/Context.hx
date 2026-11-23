@@ -116,7 +116,7 @@ class Context {
 		HxnGpuWebgl2Native.context_clear(hxnRaw, bits, r, g, b, a);
 
 	/**
-		Sets how what is drawn next blends into the target: `enable(BLEND)` with
+		Sets how what is drawn next blends into the target. It calls `enable(BLEND)` with
 		`blendEquationSeparate` and `blendFuncSeparate`, or `disable(BLEND)`.
 	**/
 	public function setBlend(blend:Blend):Void {

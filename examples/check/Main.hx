@@ -48,7 +48,10 @@ class Main {
 		Sys.println("render: submitted");
 	}
 
-	/** A 4x4 Rgba8 texture and a framebuffer rendering into it, bound and cleared to `clear`. **/
+	/**
+		Returns a 4x4 Rgba8 texture and a framebuffer that renders into it. The framebuffer
+		is bound and cleared to `clear`.
+	**/
 	static function target(context:Context, ?clear:Array<Float>):{texture:Texture, framebuffer:Framebuffer} {
 		var texture = context.createTexture(4, 4, TextureFormat.Rgba8);
 		var framebuffer = context.createFramebuffer(texture);
@@ -60,7 +63,10 @@ class Main {
 		return {texture: texture, framebuffer: framebuffer};
 	}
 
-	/** Reads the bound framebuffer's `size` square, and checks every pixel is `expected`, within `tolerance`. **/
+	/**
+		Reads a square of `size` pixels from the bound framebuffer and checks that every pixel
+		is `expected`, within `tolerance`.
+	**/
 	static function readTarget(context:Context, size:Int, expected:Array<Int>, label:String, tolerance = 0) {
 		var pixels = context.readPixels(0, 0, size, size);
 		for (i in 0...size * size)
@@ -104,9 +110,9 @@ class Main {
 		});
 	}
 
-	// Straight alpha: color = source * source alpha + destination * (1 - source alpha),
-	// and alpha = source + destination * (1 - source alpha). The shared factor codes 4
-	// (SrcAlpha), 5 (OneMinusSrcAlpha) and 1 (One), and the operation 0 (Add).
+	// Straight alpha blends with color = source * source alpha + destination * (1 - source
+	// alpha) and alpha = source + destination * (1 - source alpha). It uses the shared factor
+	// codes 4 (SrcAlpha), 5 (OneMinusSrcAlpha) and 1 (One), and the operation 0 (Add).
 	static final ALPHA:Blend = {
 		enabled: true,
 		colorOperation: 0,
@@ -127,7 +133,8 @@ class Main {
 		alphaDestination: 0
 	};
 
-	// A half-transparent red quad over a blue target: half red, half blue, opaque.
+	// The check draws a half-transparent red quad over a blue target. The result is half
+	// red, half blue and opaque.
 	static function blended(context:Context) {
 		var bindings = new Bindings(Tinted.GLSL_BINDINGS);
 		var program = hxn.gpu.webgl2.Shaders.program(context, Tinted.GLSL_VERTEX, Tinted.GLSL_FRAGMENT, bindings);

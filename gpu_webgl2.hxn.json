@@ -47,7 +47,7 @@
   "records": [
     {
       "name": "Blend",
-      "docs": "How what is drawn blends into the target. The factors are hxn-gpu's shared codes, from 0\n`Zero` to 10 `SrcAlphaSaturated`, and the operations from 0 `Add` to 4 `Max`. With\n`enabled` false, drawing writes its color as it is.",
+      "docs": "`Blend` sets how what is drawn blends into the target. The factors are hxn-gpu's shared\ncodes, from 0 `Zero` to 10 `SrcAlphaSaturated`, and the operations are the codes from 0 `Add`\nto 4 `Max`. When `enabled` is false, drawing writes its color as it is.",
       "fields": [
         { "name": "enabled", "type": "bool" },
         { "name": "color_operation", "type": "i32" },
@@ -262,7 +262,7 @@
         },
         {
           "name": "set_blend",
-          "docs": "Sets how what is drawn next blends into the target: `enable(BLEND)` with\n`blendEquationSeparate` and `blendFuncSeparate`, or `disable(BLEND)`.",
+          "docs": "Sets how what is drawn next blends into the target. It calls `enable(BLEND)` with\n`blendEquationSeparate` and `blendFuncSeparate`, or `disable(BLEND)`.",
           "kind": "method",
           "params": [{ "name": "blend", "type": "Blend" }],
           "returns": "void",

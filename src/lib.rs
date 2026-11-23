@@ -102,9 +102,9 @@ fn i32_of(value: i64, what: &str) -> Result<i32, String> {
     i32::try_from(value).map_err(|_| format!("{what} cannot be {value}"))
 }
 
-/// How what is drawn blends into the target. The factors are hxn-gpu's shared codes, from 0
-/// `Zero` to 10 `SrcAlphaSaturated`, and the operations from 0 `Add` to 4 `Max`. With
-/// `enabled` false, drawing writes its color as it is.
+/// `Blend` sets how what is drawn blends into the target. The factors are hxn-gpu's shared
+/// codes, from 0 `Zero` to 10 `SrcAlphaSaturated`, and the operations are the codes from 0 `Add`
+/// to 4 `Max`. When `enabled` is false, drawing writes its color as it is.
 #[hxn::data]
 pub struct Blend {
     pub enabled: bool,
@@ -512,7 +512,7 @@ impl Context {
             .clear(bits as u32, [r as f32, g as f32, b as f32, a as f32]);
     }
 
-    /// Sets how what is drawn next blends into the target: `enable(BLEND)` with
+    /// Sets how what is drawn next blends into the target. It calls `enable(BLEND)` with
     /// `blendEquationSeparate` and `blendFuncSeparate`, or `disable(BLEND)`.
     pub fn set_blend(&self, blend: Blend) -> Result<(), String> {
         if !blend.enabled {

@@ -2,9 +2,9 @@
 package hxn.gpu.webgl2;
 
 /**
-	How what is drawn blends into the target. The factors are hxn-gpu's shared codes, from 0
-	`Zero` to 10 `SrcAlphaSaturated`, and the operations from 0 `Add` to 4 `Max`. With
-	`enabled` false, drawing writes its color as it is.
+	`Blend` sets how what is drawn blends into the target. The factors are hxn-gpu's shared
+	codes, from 0 `Zero` to 10 `SrcAlphaSaturated`, and the operations are the codes from 0 `Add`
+	to 4 `Max`. When `enabled` is false, drawing writes its color as it is.
 **/
 @:structInit class Blend {
 	public var enabled:Bool;
