@@ -97,7 +97,6 @@ fn i32_of(value: i64, what: &str) -> Result<i32, String> {
     i32::try_from(value).map_err(|_| format!("{what} cannot be {value}"))
 }
 
-/// A texture's internal format, OpenGL ES's values.
 /// How what is drawn blends into the target. The factors are hxn-gpu's shared codes, from 0
 /// `Zero` to 10 `SrcAlphaSaturated`, and the operations from 0 `Add` to 4 `Max`. With
 /// `enabled` false, drawing writes its color as it is.
@@ -112,6 +111,7 @@ pub struct Blend {
     pub alpha_destination: i32,
 }
 
+/// A texture's internal format, OpenGL ES's values.
 #[hxn::data]
 #[derive(Clone, Copy, PartialEq)]
 pub enum TextureFormat {

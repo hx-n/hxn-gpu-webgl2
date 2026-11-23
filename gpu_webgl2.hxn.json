@@ -47,7 +47,7 @@
   "records": [
     {
       "name": "Blend",
-      "docs": "A texture's internal format, OpenGL ES's values.\nHow what is drawn blends into the target. The factors are hxn-gpu's shared codes, from 0\n`Zero` to 10 `SrcAlphaSaturated`, and the operations from 0 `Add` to 4 `Max`. With\n`enabled` false, drawing writes its color as it is.",
+      "docs": "How what is drawn blends into the target. The factors are hxn-gpu's shared codes, from 0\n`Zero` to 10 `SrcAlphaSaturated`, and the operations from 0 `Add` to 4 `Max`. With\n`enabled` false, drawing writes its color as it is.",
       "fields": [
         { "name": "enabled", "type": "bool" },
         { "name": "color_operation", "type": "i32" },
